@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Чат-помощник · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; min-height: 0 }
+.app { flex: 1; min-height: 0; display: flex; flex-direction: column; width: 100%; max-width: var(--col); margin: 0 auto; background: rgba(250,246,238,.55) }
+.head { display: flex; align-items: center; gap: 12px; padding: 10px max(14px, env(safe-area-inset-right, 0px)) 10px max(14px, env(safe-area-inset-left, 0px)); background: rgba(255,252,246,.92); border-bottom: 1px solid var(--line) }
+.head img { width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(197,146,30,.5) }
+.head b { display: block; font-size: 15px }
+.head .logo-text { font-size: 22px }
+.head span { font-size: 11.5px; color: var(--ok); font-weight: 700 }
+.head .links { margin-left: auto; display: flex; gap: 6px }
+.head .links a { width: 38px; height: 38px; border-radius: 50%; background: var(--cream-2); display: grid; place-items: center; color: var(--gold-t) }
+.head .links svg { width: 19px; height: 19px; fill: currentColor }
+.feed { flex: 1; min-height: 0; overflow-y: auto; padding: 16px max(14px, env(safe-area-inset-right, 0px)) 10px max(14px, env(safe-area-inset-left, 0px)); display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth }
+.daytag { align-self: center; font-size: 11px; font-weight: 700; color: var(--muted); background: rgba(255,255,255,.7); padding: 4px 10px; border-radius: 999px; margin-bottom: 4px }
+.msg { max-width: 84%; padding: 10px 13px; border-radius: 18px; font-size: 14.5px; line-height: 1.42; white-space: pre-line; animation: pop .2s ease }
+@keyframes pop { from { opacity: 0; transform: translateY(6px) } }
+.bot { align-self: flex-start; background: var(--paper); border-bottom-left-radius: 6px; box-shadow: 0 1px 2px rgba(74,56,16,.12) }
+.me { align-self: flex-end; background: var(--brown); color: #fff8ea; border-bottom-right-radius: 6px }
+.bot ul { margin: 6px 0 0; padding-left: 18px; white-space: normal }
+.bot .price { display: grid; gap: 3px; margin-top: 6px; white-space: normal }
+.bot .price div { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px }
+.bot .price b { white-space: nowrap; font-variant-numeric: tabular-nums }
+.bot .act { margin-top: 10px; min-height: 42px; font-size: 14px; width: 100% }
+.typing { align-self: flex-start; background: var(--paper); border-radius: 18px; padding: 12px 14px; display: flex; gap: 4px }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: #c2b49c; animation: dot 1s infinite }
+.typing i:nth-child(2) { animation-delay: .15s } .typing i:nth-child(3) { animation-delay: .3s }
+@keyframes dot { 50% { transform: translateY(-4px); background: var(--gold) } }
+.quick { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 8px max(14px, env(safe-area-inset-right, 0px)) 4px max(14px, env(safe-area-inset-left, 0px)) }
+.quick::-webkit-scrollbar { display: none }
+.quick .chip { flex: none; border-color: rgba(181,138,44,.55); color: var(--gold-t); font-weight: 700 }
+.quick .chip.done { background: var(--brown); color: #fff8ea }
+.bar { display: flex; gap: 8px; padding: 8px max(14px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(14px, env(safe-area-inset-left, 0px)); background: rgba(255,252,246,.95); border-top: 1px solid var(--line) }
+.bar input { flex: 1; min-width: 0; min-height: 44px; border-radius: 22px; border: 1px solid rgba(74,56,16,.2); background: #fff; padding: 0 16px; font-size: 15px }
+.bar button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--g-btn); display: grid; place-items: center; cursor: pointer; flex: none }
+.bar button svg { width: 20px; height: 20px; fill: #fff }
+body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
+</style>
+</head>
+<body data-page="06" data-site="tisnenie">
+<div class="app">
+  <header class="head">
+    <img src="img/avatar.jpg" alt="" width="44" height="44">
+    <div><span class="logo-text">Razden’sya</span><span style="display:block">помощник · отвечает сразу</span></div>
+    <div class="links"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a></div>
+  </header>
+  <div class="feed" id="feed" aria-live="polite"><span class="daytag">Помощник кабинета. Живые ответы — у Марины в ВКонтакте</span></div>
+  <div class="quick" id="quick"></div>
+  <form class="bar" id="bar"><input id="inp" placeholder="Напишите вопрос…" autocomplete="off" aria-label="Вопрос"><button aria-label="Отправить" data-icon="send"></button></form>
+</div>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden, feed = document.getElementById("feed"), quick = document.getElementById("quick");
+  var lead = { zones: [], when: "", name: "" }, mode = null;
+  var MENU = ["Сколько стоит?", "Больно ли?", "Сколько процедур?", "Как подготовиться?", "Кому нельзя?", "Записаться"];
+
+  function add(cls, html) { var d = document.createElement("div"); d.className = "msg " + cls; d.innerHTML = html; feed.appendChild(d); feed.scrollTop = feed.scrollHeight; return d }
+  function say(html, chips, after) {
+    quick.innerHTML = "";
+    var t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>"; feed.appendChild(t); feed.scrollTop = feed.scrollHeight;
+    setTimeout(function () { t.remove(); var m = add("bot", html); if (after) after(m); setChips(chips || MENU) }, 650);
+  }
+  function setChips(list) { quick.innerHTML = list.map(function (c) { return '<button type="button" class="chip">' + c + "</button>" }).join("") }
+  function me(text) { add("me", R.esc(text)) }
+
+  var A = {
+    "Сколько стоит?": function () {
+      say("Цена за одну процедуру на одну зону:<div class='price'>" + R.zones.map(function (z) { return "<div><span>" + z.name + "</span><b>" + (z.from ? "от " : "") + R.rub(z.price) + "</b></div>" }).join("") + "</div>", ["Посчитать мой курс", "Записаться", "Больно ли?", "Сколько процедур?"]);
+    },
+    "Посчитать мой курс": function () { mode = "calc"; lead.zones = []; say("Отметьте зоны и нажмите «Готово».", zoneChips()) },
+    "Больно ли?": function () { say("Ощущения индивидуальны и зависят от зоны. Во время процедуры можно делать паузы: скажите Марине, и она остановится.", ["Сколько процедур?", "Как подготовиться?", "Записаться"]) },
+    "Сколько процедур?": function () { say("Чаще всего 2–3 на одну зону, с интервалом не меньше месяца. Свежим растяжкам обычно нужно меньше, старым белым больше.\n\nПервые две недели кожа заживает, дальше изменения идут постепенно, несколько месяцев. Полностью стереть растяжку не может ни одна методика, а сделать заметно менее видимой можно.", ["Сколько стоит?", "Записаться"]) },
+    "Как подготовиться?": function () { say("<b>За день:</b> без скрабов, кислот и спиртовых средств в зоне, без алкоголя.<br><b>В день процедуры:</b> кожа чистая и сухая, без масел, крема, дезодоранта и парфюма. Свободная одежда, кофе лучше не пить.", ["Кому нельзя?", "Записаться"]) },
+    "Кому нельзя?": function () { say("Процедуру не проводят при беременности, кормлении меньше 6 месяцев после родов, сахарном диабете I типа, гемофилии и тромбофлебите, ВИЧ и гепатитах, почечной и печёночной недостаточности, склонности к келоидам, псориазе, эпилепсии, бронхиальной астме, во время лучевой и химиотерапии.\n\nПри простуде, герпесе или воспалении в зоне запись переносим. Если сомневаетесь, напишите Марине.", ["Записаться", "Спросить Марину"]) },
+    "Записаться": function () { mode = "book"; lead.zones = []; say("С удовольствием помогу. Какая зона? Можно несколько, потом «Готово».", zoneChips()) },
+    "Спросить Марину": function () { R.send("Здравствуйте, Марина! У меня вопрос: ") },
+    "В начало": function () { mode = null; say("Что ещё подсказать?") }
+  };
+  function zoneChips() { return R.zones.map(function (z) { return z.name }).concat(["Готово"]) }
+
+  function onChip(text, btn) {
+    if (mode === "calc" || mode === "book") {
+      if (text !== "Готово") {
+        var z = R.zones.filter(function (x) { return x.name === text })[0], k = lead.zones.indexOf(z.id);
+        if (k > -1) lead.zones.splice(k, 1); else lead.zones.push(z.id);
+        btn.classList.toggle("done", k === -1); return;
+      }
+      if (!lead.zones.length) { R.toast("Отметьте хотя бы одну зону"); return }
+      var names = lead.zones.map(function (id) { return R.zone(id).name });
+      me(names.join(", "));
+      if (mode === "calc") {
+        var one = lead.zones.reduce(function (s, id) { return s + R.zone(id).price }, 0); mode = null;
+        say("За один визит: <b>" + R.rub(one) + "</b>.\nЗа курс из 2 процедур: <b>" + R.rub(one * 2) + "</b>, из 3: <b>" + R.rub(one * 3) + "</b>.\nТочное число процедур Марина скажет на консультации.", ["Записаться", "В начало"]);
+      } else { mode = "when"; say("Когда вам удобнее?", ["Будни днём", "Будни вечером", "Выходные"]) }
+      return;
+    }
+    if (mode === "when") { lead.when = text; me(text); mode = "name"; say("Как к вам обращаться? Напишите имя внизу.", []); document.getElementById("inp").focus(); return }
+    me(text);
+    (A[text] || A["В начало"])();
+  }
+  quick.addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (b) onChip(b.textContent, b) });
+
+  document.getElementById("bar").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var inp = document.getElementById("inp"), v = inp.value.trim(); if (!v) return;
+    inp.value = ""; me(v);
+    if (mode === "name") {
+      lead.name = v; mode = null;
+      var text = "Здравствуйте, Марина! Заявка через помощника на сайте.\nИмя: " + lead.name + "\nЗона: " + lead.zones.map(function (id) { return R.zone(id).name }).join(", ") + "\nКогда удобно: " + lead.when.toLowerCase();
+      say("Спасибо, " + R.esc(lead.name) + "! Заявка готова. Отправьте её Марине, она подтвердит время.<button type='button' class='btn btn-gold act'>Отправить Марине</button>", ["Как подготовиться?", "В начало"], function (m) { m.querySelector(".act").onclick = function () { R.send(text, { title: "Заявка Марине" }) } });
+      return;
+    }
+    var low = v.toLowerCase(), hit = low.match(/цен|стоит|сколько стоит|прайс/) ? "Сколько стоит?" : low.match(/боль/) ? "Больно ли?" : low.match(/сколько|процедур|курс/) ? "Сколько процедур?" : low.match(/подготов/) ? "Как подготовиться?" : low.match(/нельзя|противопок|беремен|корм/) ? "Кому нельзя?" : low.match(/запис/) ? "Записаться" : null;
+    if (hit) { A[hit](); return }
+    say("Этот вопрос лучше задать Марине напрямую. Перешлю его вам в чат одной кнопкой.<button type='button' class='btn btn-gold act'>Спросить Марину</button>", MENU, function (m) { m.querySelector(".act").onclick = function () { R.send("Здравствуйте, Марина! Вопрос с сайта: " + v) } });
+  });
+
+  say("Здравствуйте! Я помощник кабинета Razden’sya. Подскажу по ценам, процедуре и записи.\nЧто интересно?");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Отзыв за 30 секунд · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+.top { text-align: center; padding: 22px 0 2px }
+.top .logo-text { font-size: 30px }
+h1 { margin: 6px 0 4px; font: 400 38px/1 var(--f-display); text-align: center }
+.lead { margin: 0 0 14px; text-align: center; font-size: 14px; color: var(--text) }
+.q { margin: 0 0 8px; font-size: 13px; font-weight: 800; color: var(--ink) }
+.chips { display: flex; flex-wrap: wrap; gap: 7px }
+.chips .chip { font-size: 13px }
+.chips .chip svg { width: 15px; height: 15px; fill: currentColor }
+.row2 { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 14px }
+textarea.input { min-height: 74px; resize: vertical }
+.letter { position: relative; margin-top: 14px; background: var(--paper); border-radius: 6px 22px 22px 22px; padding: 26px 18px 16px; box-shadow: 0 18px 36px -24px rgba(74,56,16,.7), inset 0 0 0 1px rgba(197,146,30,.3) }
+.letter::before { content: "“"; position: absolute; top: -18px; left: 12px; font: 400 90px/1 var(--f-display); color: var(--gold) }
+.letter p { margin: 0; font: italic 400 15px/1.55 var(--f-body); color: var(--ink); white-space: pre-line }
+.letter .who { margin-top: 10px; font-size: 12.5px; font-weight: 800; color: var(--gold-t); font-style: normal }
+.letter .empty { color: var(--muted) }
+.where { margin-top: 14px; display: grid; gap: 8px }
+.where .k { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t); text-align: center }
+.where .btn .badge { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #fff }
+.private { margin-top: 14px; display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; background: var(--card); border-radius: 18px; padding: 12px 14px }
+.private b { display: block; font-size: 14px } .private span { font-size: 12.5px; color: var(--muted) }
+.private button { border: 0; background: var(--cream-2); border-radius: 12px; padding: 10px 12px; font-weight: 800; font-size: 13px; cursor: pointer }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 12px 6px 0 }
+</style>
+</head>
+<body data-page="14" data-site="tisnenie">
+<main class="col">
+  <header class="top"><span class="logo-text">Razden’sya</span></header>
+  <h1>Отзыв за 30 секунд</h1>
+  <p class="lead">Отметьте, что понравилось. Текст соберётся сам, останется опубликовать.</p>
+
+  <section class="card">
+    <p class="q">Что понравилось?</p>
+    <div class="chips" id="likes"></div>
+    <div class="row2">
+      <div class="field"><label for="own">Своими словами, если хочется</label><textarea class="input" id="own" maxlength="300" placeholder="Например: белые растяжки на животе после родов, всё подробно объяснили"></textarea></div>
+      <div class="field"><label for="nm">Подпись</label><input class="input" id="nm" maxlength="30" placeholder="Имя или инициалы, можно оставить пустым"></div>
+    </div>
+  </section>
+
+  <div class="letter" aria-live="polite"><p id="txt"></p><div class="who" id="who"></div></div>
+
+  <section class="where">
+    <span class="k">где опубликовать</span>
+    <a class="btn btn-gold" data-go="vk" target="_blank" rel="noopener"><span class="badge" style="background:rgba(255,255,255,.2)">VK</span>Скопировать и открыть ВКонтакте</a>
+    <a class="btn btn-line" data-go="ya" target="_blank" rel="noopener"><span class="badge" style="background:#e03a2f">Я</span>Скопировать и открыть Яндекс Карты</a>
+    <a class="btn btn-line" data-go="gis" target="_blank" rel="noopener"><span class="badge" style="background:#2e9b4a">2Г</span>Скопировать и открыть 2ГИС</a>
+  </section>
+
+  <section class="private">
+    <div><b>Есть замечание?</b><span>Можно сказать Марине лично</span></div>
+    <button type="button" id="priv">Написать</button>
+  </section>
+  <p class="fine">Отзыв публикуете вы сами. Можно написать любой: и с похвалой, и с замечаниями.</p>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  // Куда вести: страница ВКонтакте и карточки на картах — поправить при сборке
+  var LINKS = { vk: R.contacts.vk, ya: "https://yandex.ru/maps/?text=Razden%E2%80%99sya%20%D0%98%D0%B6%D0%B5%D0%B2%D1%81%D0%BA", gis: "https://2gis.ru/izhevsk/search/Razdensya" };
+  var LIKES = [
+    ["shield", "Стерильно и аккуратно", "всё стерильно и аккуратно, иглы вскрыли при мне"],
+    ["help", "Всё объяснила", "Марина подробно рассказала, как проходит процедура и чего ждать"],
+    ["check", "Терпимо по ощущениям", "по ощущениям было терпимо, делали паузы, когда нужно"],
+    ["home", "Уютный кабинет", "в кабинете уютно и спокойно"],
+    ["list", "Памятка по уходу", "дали памятку по уходу, всё понятно"],
+    ["clock", "Удобная запись", "записаться было легко, приняли вовремя"],
+    ["spark", "Честно о результате", "честно сказала, какого результата ждать, без обещаний «навсегда»"]
+  ];
+  var on = R.get("review-likes", [0, 1, 4]);
+  $("likes").innerHTML = LIKES.map(function (l, k) { return '<button type="button" class="chip" data-k="' + k + '">' + R.icon(l[0]) + l[1] + "</button>" }).join("");
+  document.querySelectorAll("[data-go]").forEach(function (a) { a.href = LINKS[a.dataset.go] });
+
+  function text() {
+    var parts = on.slice().sort(function (a, b) { return a - b }).map(function (k) { return LIKES[k][2] });
+    var t = "";
+    if (parts.length) { t = "Коррекция растяжек у Марины в Razden’sya: " + parts.join("; ") + "."; t = t.charAt(0).toUpperCase() + t.slice(1) }
+    var own = $("own").value.trim();
+    if (own) t += (t ? "\n" : "") + own;
+    return t;
+  }
+  function render() {
+    document.querySelectorAll("#likes .chip").forEach(function (c) { c.classList.toggle("on", on.indexOf(+c.dataset.k) > -1) });
+    var t = text(), nm = $("nm").value.trim();
+    $("txt").textContent = t || "Отметьте хотя бы одну плашку или напишите пару слов";
+    $("txt").classList.toggle("empty", !t);
+    $("who").textContent = nm ? "— " + nm : "";
+    R.set("review-likes", on);
+  }
+  $("likes").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (!b) return; var k = +b.dataset.k, i = on.indexOf(k); if (i > -1) on.splice(i, 1); else on.push(k); render() });
+  $("own").addEventListener("input", render); $("nm").addEventListener("input", render);
+  document.querySelector(".where").addEventListener("click", function (e) {
+    var a = e.target.closest("[data-go]"); if (!a) return;
+    var t = text(); if (!t) { e.preventDefault(); R.toast("Сначала отметьте, что понравилось"); return }
+    var nm = $("nm").value.trim();
+    R.copy(t + (nm ? "\n— " + nm : "")); R.toast("Отзыв скопирован. Вставьте его в поле отзыва");
+  });
+  $("priv").addEventListener("click", function () { R.send("Марина, хочу поделиться впечатлением о процедуре: ", { title: "Лично Марине" }) });
+  render();
+})();
+</script>
+</body>
+</html>

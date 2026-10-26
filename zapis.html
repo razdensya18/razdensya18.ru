@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Запись в 3 шага · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+.hero { display: grid; grid-template-columns: 74px 1fr; gap: 14px; align-items: center; padding: 22px 0 10px }
+.hero img { width: 74px; height: 74px; border-radius: 50%; box-shadow: 0 0 0 3px var(--cream), 0 0 0 4.5px rgba(197,146,30,.6) }
+.hero .logo-text { font-size: 34px }
+.hero p { margin: 4px 0 0; font-size: 13px; color: var(--text) }
+h1 { margin: 10px 0 14px; font: 400 32px/1.05 var(--f-display) }
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; counter-reset: s }
+.steps span { counter-increment: s; display: grid; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--muted) }
+.steps span::before { content: ""; height: 4px; border-radius: 2px; background: var(--cream-2) }
+.steps span.on { color: var(--ink) }
+.steps span.on::before { background: var(--g-btn) }
+.step h2 { margin: 0 0 4px; font-size: 18px; font-weight: 800 }
+.step > p { margin: 0 0 14px; font-size: 13px; color: var(--muted) }
+.zones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.zbtn { text-align: left; border: 1.5px solid rgba(74,56,16,.16); background: var(--paper); border-radius: 16px; padding: 12px; display: grid; gap: 4px; cursor: pointer; min-height: 74px }
+.zbtn b { font-size: 14px; line-height: 1.2 }
+.zbtn span { font-size: 12.5px; color: var(--muted) }
+.zbtn[aria-pressed="true"] { border-color: var(--brown); background: #f6ecd7; box-shadow: inset 0 0 0 1px var(--brown) }
+.zbtn.wide { grid-column: 1 / -1; min-height: 0 }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px }
+.cal-head b { font-size: 15px; text-transform: capitalize }
+.cal-head button { width: 38px; height: 38px; border-radius: 12px; border: 0; background: var(--cream-2); display: grid; place-items: center; cursor: pointer }
+.cal-head button[disabled] { opacity: .35 }
+.cal-head svg { width: 20px; height: 20px; fill: var(--ink) }
+.grid7 { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center }
+.grid7 .wd { font-size: 11px; font-weight: 700; color: var(--muted); padding: 4px 0 }
+.day { aspect-ratio: 1; border: 0; border-radius: 12px; background: none; font-size: 14px; font-weight: 600; color: #b9ad99; cursor: default; position: relative }
+.day.open { color: var(--ink); background: var(--paper); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(197,146,30,.45) }
+.day.open::after { content: ""; position: absolute; left: 50%; bottom: 5px; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--gold) }
+.day.sel { background: var(--brown); color: #fff8ea; box-shadow: none }
+.day.sel::after { background: #fff8ea }
+.times { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px }
+.times-l { margin: 16px 0 0; font-size: 13px; font-weight: 700 }
+.prefs { display: flex; gap: 8px; flex-wrap: wrap }
+.summary { margin-top: 14px; background: var(--cream); border-radius: 16px; padding: 14px; display: grid; gap: 6px; font-size: 13.5px }
+.summary div { display: grid; grid-template-columns: 80px 1fr; gap: 8px }
+.summary dt, .summary span:first-child { color: var(--muted) }
+.nav { display: flex; gap: 10px; margin-top: 16px }
+.nav .btn { flex: 1 }
+.done { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 6px 0 }
+.done .ok { width: 56px; height: 56px; border-radius: 50%; background: var(--g-btn); display: grid; place-items: center }
+.done .ok svg { width: 28px; height: 28px; fill: #fff }
+.done h2 { font: 400 28px/1.05 var(--f-display); margin: 0 }
+.done p { margin: 0; font-size: 13.5px; color: var(--text) }
+.done .btn { width: 100% }
+.fine { font-size: 12px; color: var(--muted); text-align: center; margin: 14px 10px 18px }
+textarea.input { min-height: 70px; resize: vertical }
+</style>
+</head>
+<body data-page="02" data-site="tisnenie">
+<main class="col">
+  <header class="hero">
+    <img src="img/avatar.jpg" alt="Лайн-арт лица на шёлке" width="74" height="74">
+    <div><span class="logo-text">Razden’sya</span><p>Коррекция растяжек и шрамов · Ижевск</p></div>
+  </header>
+  <h1>Онлайн-запись на консультацию</h1>
+
+  <section class="card">
+    <div class="steps" aria-hidden="true"><span data-s="1">Зона</span><span data-s="2">День и время</span><span data-s="3">Контакты</span></div>
+
+    <div class="step" data-step="1">
+      <h2>Что хотите поправить?</h2>
+      <p>Можно выбрать несколько зон.</p>
+      <div class="zones" id="zones"></div>
+    </div>
+
+    <div class="step" data-step="2" hidden>
+      <h2>Когда удобно?</h2>
+      <p>Точками отмечены дни приёма.</p>
+      <div class="cal-head"><button type="button" id="prevM" aria-label="Предыдущий месяц"></button><b id="mName"></b><button type="button" id="nextM" aria-label="Следующий месяц"></button></div>
+      <div class="grid7" id="cal"></div>
+      <p class="times-l" id="timesL" hidden>Время</p>
+      <div class="times" id="times"></div>
+    </div>
+
+    <div class="step" data-step="3" hidden>
+      <h2>Как с вами связаться?</h2>
+      <p>Марина подтвердит время в сообщениях.</p>
+      <div class="field"><label for="nm">Как к вам обращаться</label><input class="input" id="nm" autocomplete="given-name" placeholder="Имя"></div>
+      <div class="field" style="margin-top:12px"><label>Где удобнее переписываться</label><div class="prefs" id="pref"><button type="button" class="chip on" data-p="ВКонтакте">ВКонтакте</button><button type="button" class="chip" data-p="Telegram">Telegram</button></div></div>
+      <div class="field" style="margin-top:12px"><label for="cm">Комментарий, если нужно</label><textarea class="input" id="cm" placeholder="Например: растяжки после родов, белые"></textarea></div>
+      <dl class="summary" id="sum"></dl>
+    </div>
+
+    <div class="step" data-step="4" hidden>
+      <div class="done">
+        <span class="ok" data-icon="check"></span>
+        <h2>Заявка готова</h2>
+        <p id="doneTxt"></p>
+        <button type="button" class="btn btn-gold" id="resend">Открыть сообщение ещё раз</button>
+        <button type="button" class="btn btn-line" id="ics" data-icon="bell">Напоминание в календарь</button>
+        <button type="button" class="btn btn-soft" id="again">Новая заявка</button>
+      </div>
+    </div>
+
+    <div class="nav" id="nav">
+      <button type="button" class="btn btn-soft" id="back">Назад</button>
+      <button type="button" class="btn btn-gold" id="next">Дальше</button>
+    </div>
+  </section>
+
+  <p class="fine">Это заявка, а не бронь: время закрепляется после ответа Марины.</p>
+  <div class="contacts"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden;
+  // Дни приёма: дни недели (1 — пн … 7 — вс) и время. Можно привязать к графику 2×2
+  var DAYS = [2, 4, 6], TIMES = ["10:00", "12:30", "15:00", "17:30"];
+  var st = { step: 1, zones: [], day: null, time: null, pref: "ВКонтакте", month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
+  var $ = function (id) { return document.getElementById(id) };
+
+  $("zones").innerHTML = R.zones.map(function (z) {
+    return '<button type="button" class="zbtn" data-z="' + z.id + '" aria-pressed="false"><b>' + z.name + "</b><span>" + (z.from ? "от " : "") + R.rub(z.price) + "</span></button>";
+  }).join("") + '<button type="button" class="zbtn wide" data-z="help" aria-pressed="false"><b>Не знаю, подскажите</b><span>Разберёмся на консультации</span></button>';
+  $("prevM").innerHTML = R.icon("left"); $("nextM").innerHTML = R.icon("right");
+
+  function isOpen(d) { var wd = d.getDay() || 7; return d > R.today() && DAYS.indexOf(wd) > -1 && d <= R.addDays(R.today(), 60) }
+  function zoneNames() { return st.zones.map(function (id) { return id === "help" ? "пока не знаю, нужна подсказка" : R.zone(id).name }) }
+
+  function drawCal() {
+    var m = st.month, first = new Date(m), pad = (first.getDay() || 7) - 1;
+    var days = new Date(m.getFullYear(), m.getMonth() + 1, 0).getDate();
+    $("mName").textContent = m.toLocaleDateString("ru-RU", { month: "long", year: "numeric" });
+    var h = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"].map(function (w) { return '<span class="wd">' + w + "</span>" }).join("");
+    for (var i = 0; i < pad; i++) h += "<span></span>";
+    for (var d = 1; d <= days; d++) {
+      var dt = new Date(m.getFullYear(), m.getMonth(), d), open = isOpen(dt), key = R.ymd(dt);
+      h += '<button type="button" class="day' + (open ? " open" : "") + (st.day === key ? " sel" : "") + '" ' + (open ? 'data-d="' + key + '"' : "disabled") + ' aria-label="' + R.date(dt) + (open ? "" : ", нет приёма") + '">' + d + "</button>";
+    }
+    $("cal").innerHTML = h;
+    var now = new Date(R.today().getFullYear(), R.today().getMonth(), 1);
+    $("prevM").disabled = m <= now;
+    $("nextM").disabled = m >= new Date(now.getFullYear(), now.getMonth() + 2, 1);
+    $("timesL").hidden = !st.day;
+    $("times").innerHTML = st.day ? TIMES.map(function (t) { return '<button type="button" class="chip' + (st.time === t ? " on" : "") + '" data-t="' + t + '">' + t + "</button>" }).join("") : "";
+  }
+
+  function message() {
+    var d = R.parse(st.day);
+    return "Здравствуйте, Марина! Заявка на консультацию с сайта.\n" +
+      "Зона: " + zoneNames().join(", ") + "\n" +
+      "Когда: " + R.date(d, { weekday: "long", day: "numeric", month: "long" }) + ", " + st.time + "\n" +
+      "Имя: " + ($("nm").value.trim() || "—") + "\n" +
+      "Переписываться: " + st.pref + ($("cm").value.trim() ? "\nКомментарий: " + $("cm").value.trim() : "");
+  }
+
+  function render() {
+    document.querySelectorAll("[data-step]").forEach(function (s) { s.hidden = +s.dataset.step !== st.step });
+    document.querySelectorAll(".steps span").forEach(function (s) { s.classList.toggle("on", +s.dataset.s <= st.step) });
+    document.querySelectorAll(".zbtn").forEach(function (b) { b.setAttribute("aria-pressed", st.zones.indexOf(b.dataset.z) > -1) });
+    $("nav").hidden = st.step === 4;
+    $("back").style.visibility = st.step === 1 ? "hidden" : "visible";
+    $("next").textContent = st.step === 3 ? "Отправить заявку" : "Дальше";
+    $("next").disabled = (st.step === 1 && !st.zones.length) || (st.step === 2 && !(st.day && st.time)) || (st.step === 3 && !$("nm").value.trim());
+    if (st.step === 2) drawCal();
+    if (st.step === 3) {
+      var d = R.parse(st.day);
+      $("sum").innerHTML = "<div><span>Зона</span><span>" + R.esc(zoneNames().join(", ")) + "</span></div><div><span>Когда</span><span>" + R.date(d, { weekday: "short", day: "numeric", month: "long" }) + ", " + st.time + "</span></div>";
+    }
+  }
+
+  $("zones").addEventListener("click", function (e) {
+    var b = e.target.closest(".zbtn"); if (!b) return;
+    var k = st.zones.indexOf(b.dataset.z);
+    if (k > -1) st.zones.splice(k, 1); else st.zones.push(b.dataset.z);
+    render();
+  });
+  $("cal").addEventListener("click", function (e) { var b = e.target.closest("[data-d]"); if (b) { st.day = b.dataset.d; st.time = null; render() } });
+  $("times").addEventListener("click", function (e) { var b = e.target.closest("[data-t]"); if (b) { st.time = b.dataset.t; render() } });
+  $("prevM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() - 1, 1); drawCal() });
+  $("nextM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() + 1, 1); drawCal() });
+  $("pref").addEventListener("click", function (e) {
+    var b = e.target.closest(".chip"); if (!b) return;
+    st.pref = b.dataset.p; this.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("on", c === b) });
+  });
+  $("nm").addEventListener("input", render);
+  $("back").addEventListener("click", function () { st.step--; render() });
+  $("next").addEventListener("click", function () {
+    if (st.step < 3) { st.step++; render(); return }
+    var text = message();
+    $("doneTxt").textContent = "Осталось отправить сообщение Марине. Если чат не открылся, нажмите кнопку ниже.";
+    st.step = 4; render();
+    R.send(text, { title: "Заявка Марине" });
+  });
+  $("resend").addEventListener("click", function () { R.send(message(), { title: "Заявка Марине" }) });
+  $("ics").addEventListener("click", function () {
+    var d = R.parse(st.day), p = st.time.split(":");
+    d.setHours(+p[0], +p[1]);
+    R.saveFile("zapis-razdensya.ics", R.ics([{ title: "Консультация Razden’sya (ждёт подтверждения)", start: d, minutes: 60, desc: "Заявка отправлена Марине. Дождитесь подтверждения времени.", alarm: 120 }]));
+    R.toast("Открываю файл для календаря");
+  });
+  $("again").addEventListener("click", function () { st = { step: 1, zones: [], day: null, time: null, pref: st.pref, month: st.month }; $("nm").value = ""; $("cm").value = ""; render() });
+  render();
+})();
+</script>
+</body>
+</html>

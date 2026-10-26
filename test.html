@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Мои растяжки · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+/* Один тест вместо двух: пять вопросов о растяжках + шестой — противопоказания. Итог: стадия, курс, вердикт и подготовка */
+.banner { position: relative; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); aspect-ratio: 5 / 3; overflow: hidden }
+.banner img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0 }
+.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(244,238,228,0) 40%, var(--cream) 100%) }
+.banner .logo-text { position: absolute; z-index: 1; right: 22px; bottom: 26px; font-size: 42px }
+.quiz { margin-top: -6px; display: grid; scroll-margin-top: calc(64px + env(safe-area-inset-top, 0px)) }
+.q { display: grid; gap: 14px; align-content: start; animation: in .25s ease }
+@keyframes in { from { opacity: 0; transform: translateX(16px) } }
+.dots { display: flex; gap: 6px; justify-content: center }
+.dots i { width: 22px; height: 4px; border-radius: 2px; background: var(--cream-2) }
+.dots i.on { background: var(--g-btn) }
+.q .eyebrow { text-align: center }
+.q h1, .q h2 { margin: 0; font: 400 32px/1.04 var(--f-display); text-align: center; text-wrap: balance }
+.q p { margin: 0; text-align: center; color: var(--text); font-size: 14px }
+.what { display: grid; gap: 8px; margin: 2px 0 4px; padding: 0; list-style: none }
+.what li { display: grid; grid-template-columns: 30px 1fr; gap: 10px; align-items: center; font-size: 13.5px; color: var(--text) }
+.what .ci { width: 30px; height: 30px; border-radius: 50%; border: 1.3px solid var(--gold); display: grid; place-items: center; color: var(--gold-t) }
+.what .ci svg { width: 15px; height: 15px; fill: currentColor }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 38px 1fr; gap: 12px; align-items: center; text-align: left; border: 1.5px solid rgba(74,56,16,.16); background: var(--paper); border-radius: 16px; padding: 12px; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--ink) }
+.opt small { display: block; font-weight: 500; font-size: 12px; color: var(--muted); margin-top: 2px }
+.opt .sw { width: 38px; height: 38px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08) }
+.opt .sw.lines { background: repeating-linear-gradient(100deg, transparent 0 7px, var(--c) 7px 9px), #f1dcc8 }
+.opt .num { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--cream-2); font-weight: 800; color: var(--gold-t) }
+.opt[aria-pressed="true"] { border-color: var(--brown); background: #f6ecd7; box-shadow: inset 0 0 0 1px var(--brown) }
+.chips { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center }
+.nav { display: flex; gap: 10px }
+.nav .btn { flex: 1 }
+.lock { display: flex; gap: 8px; align-items: center; justify-content: center; font-size: 12px; color: var(--ok); font-weight: 700; margin: -4px 0 0 }
+.lock svg { width: 14px; height: 14px; fill: currentColor; flex: none }
+.grp h3 { margin: 6px 0 2px; font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--gold-t) }
+.grp > p { margin: 0 0 4px; font-size: 12.5px; color: var(--muted); text-align: left }
+.tg { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); font-size: 14px; cursor: pointer }
+.tg input { appearance: none; -webkit-appearance: none; flex: none; width: 46px; height: 28px; border-radius: 999px; background: var(--cream-2); position: relative; cursor: pointer; transition: background .15s; margin: 0 }
+.tg input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.25); transition: transform .15s }
+.tg input:checked { background: var(--brown) }
+.tg input:checked::after { transform: translateX(18px) }
+.res { display: grid; gap: 14px; animation: in .3s ease }
+.verdict { border-radius: 18px; padding: 13px 14px; display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; color: #fff; box-shadow: 0 14px 30px -18px rgba(0,0,0,.5) }
+.verdict .ic { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.2); display: grid; place-items: center }
+.verdict .ic svg { width: 18px; height: 18px; fill: #fff }
+.verdict b { display: block; font-size: 14.5px }
+.verdict span { font-size: 12.5px; opacity: .92 }
+.verdict.ok { background: var(--ok) } .verdict.warn { background: var(--warn) } .verdict.stop { background: var(--stop) }
+.res-card { background: var(--dark); color: #f5ecda; border-radius: 24px; padding: 20px 18px; display: grid; gap: 10px; text-align: center }
+.res-card .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.res-card h2 { margin: 0; font: 400 34px/1.02 var(--f-display); color: #f8eedb }
+.res-card p { margin: 0; font-size: 14px; color: #d8cab0 }
+.meter { height: 8px; border-radius: 4px; background: rgba(255,255,255,.1); overflow: hidden }
+.meter i { display: block; height: 100%; background: linear-gradient(90deg, #c5921e, #f0c86a); border-radius: 4px }
+.meter-l { display: flex; justify-content: space-between; font-size: 10.5px; color: #a99b82 }
+.facts { display: grid; gap: 10px }
+.fact { display: grid; grid-template-columns: 30px 1fr; gap: 10px; font-size: 13.5px; color: var(--text); line-height: 1.45 }
+.fact .ci { width: 30px; height: 30px; border-radius: 50%; border: 1.3px solid var(--gold); display: grid; place-items: center; color: var(--gold-t) }
+.fact .ci svg { width: 15px; height: 15px; fill: currentColor }
+.fact b { color: var(--ink) }
+.disc { font-size: 12px; color: var(--muted); text-align: center; margin: 0 }
+.prep { margin-top: 14px }
+.prep h2 { margin: 0 0 4px; font: 400 28px/1.05 var(--f-display) }
+.prep > p { margin: 0; font-size: 13px; color: var(--muted) }
+.when { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; margin: 10px 0 12px }
+.count { background: var(--cream); border-radius: 14px; padding: 10px 12px; text-align: center; min-width: 96px }
+.count b { display: block; font-size: 24px; line-height: 1; font-variant-numeric: tabular-nums }
+.count span { font-size: 11px; color: var(--muted) }
+.cl h3 { margin: 12px 0 6px; font-size: 13px; font-weight: 800 }
+.ck { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; padding: 7px 0; font-size: 14px; cursor: pointer; line-height: 1.35 }
+.ck input { appearance: none; -webkit-appearance: none; width: 24px; height: 24px; border-radius: 8px; border: 1.5px solid rgba(74,56,16,.35); background: var(--paper); margin: 0; cursor: pointer; display: grid; place-items: center }
+.ck input:checked { background: var(--brown); border-color: var(--brown) }
+.ck input:checked::after { content: "✓"; color: #fff; font-weight: 800; font-size: 14px }
+.ck input:checked + span { color: var(--muted); text-decoration: line-through }
+.progress { height: 6px; border-radius: 3px; background: var(--cream-2); overflow: hidden; margin-top: 8px }
+.progress i { display: block; height: 100%; background: var(--g-btn); transition: width .2s }
+.btns { display: grid; gap: 8px; margin-top: 14px }
+</style>
+</head>
+<body data-page="test" data-site="tisnenie">
+<main class="col">
+  <div class="banner"><img src="img/shapka.jpg" alt="Лайн-арт лица на шёлке"><span class="logo-text">Razden’sya</span></div>
+  <section class="card quiz" id="quiz" aria-live="polite"></section>
+
+  <section class="card prep" id="prep" hidden>
+    <span class="eyebrow">подготовка</span>
+    <h2>Уже записаны?</h2>
+    <p>Отметьте дату — посчитаем дни и напомним накануне.</p>
+    <div class="when">
+      <div class="field"><label for="date">Дата процедуры</label><input class="input" type="date" id="date"></div>
+      <div class="count" id="count"><b>—</b><span>дней</span></div>
+    </div>
+    <div class="cl" id="cl"></div>
+    <div class="progress" aria-hidden="true"><i id="bar" style="width:0"></i></div>
+    <div class="btns"><button type="button" class="btn btn-line" id="ics" data-icon="bell">Напомнить накануне</button></div>
+  </section>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) }, box = $("quiz");
+  var Q = [
+    { id: "color", t: "Какого цвета растяжки?", p: "Посмотрите при дневном свете.", o: [
+      { v: 0, l: "Красные или розовые", s: "#d98a8a", h: "чаще свежие, до года" },
+      { v: .7, l: "Фиолетовые, синюшные", s: "#9a7aa8", h: "переход к зрелым" },
+      { v: 2, l: "Белые, серебристые", s: "#efeae2", h: "зрелые" },
+      { v: 1.5, l: "Почти цвета кожи", s: "#e2c3a6", h: "заметны по рельефу" }] },
+    { id: "age", t: "Как давно они появились?", o: [
+      { v: 0, l: "Меньше полугода" }, { v: 1, l: "От полугода до года" }, { v: 2, l: "1–3 года" }, { v: 2.5, l: "Больше трёх лет" }] },
+    { id: "relief", t: "Какие они на ощупь?", o: [
+      { v: 0, l: "Вровень с кожей", h: "почти не чувствуются пальцами" },
+      { v: 1, l: "Слегка западают", h: "есть небольшая бороздка" },
+      { v: 2, l: "Заметно западают", h: "чувствуется глубина" }] },
+    { id: "width", t: "Какой они ширины?", o: [
+      { v: 0, l: "Тонкие нити", h: "до 2 мм" }, { v: 1, l: "Средние", h: "2–5 мм" }, { v: 2, l: "Широкие", h: "больше 5 мм" }] },
+    { id: "zones", t: "Где растяжки?", p: "Можно выбрать несколько зон.", multi: true },
+    { id: "contra", t: "Есть ли у вас сейчас что-то из этого?", contra: true }
+  ];
+  // Противопоказания: g1 — процедура не проводится, g2 — переждать, g3 — сказать Марине заранее
+  var G = [
+    { id: "g1", h: "Процедура не проводится", items: ["Беременность", "Кормление грудью, меньше 6 месяцев после родов", "Сахарный диабет I типа", "Гемофилия или тромбофлебит", "ВИЧ, гепатиты", "Почечная или печёночная недостаточность", "Склонность к келоидным рубцам", "Псориаз", "Эпилепсия", "Бронхиальная астма", "Лучевая или химиотерапия сейчас"] },
+    { id: "g2", h: "Нужно подождать", items: ["Простуда или ОРВИ", "Герпес в активной фазе", "Воспаление или высыпания в зоне процедуры"] },
+    { id: "g3", h: "Обсудить с Мариной", items: ["Аллергия на косметику", "Родинки или образования в зоне", "Рубец моложе полугода"] }
+  ];
+  var ans = {}, on = {}, i = -1;
+
+  function picked(g) { var grp = G.filter(function (x) { return x.id === g })[0]; return grp.items.filter(function (_, k) { return on[g + "-" + k] }) }
+  function dots() { return '<div class="dots" aria-hidden="true">' + Q.map(function (_, k) { return "<i" + (k <= i ? ' class="on"' : "") + "></i>" }).join("") + "</div>" }
+
+  function intro() {
+    $("prep").hidden = true;
+    box.innerHTML = '<div class="q"><span class="eyebrow">6 вопросов · 2 минуты</span><h1>Мои растяжки</h1>' +
+      "<p>Ответьте на несколько вопросов — и сразу увидите:</p>" +
+      '<ul class="what"><li><span class="ci">' + R.icon("spark") + "</span>какие у вас растяжки и чего ждать от результата</li>" +
+      '<li><span class="ci">' + R.icon("list") + "</span>сколько процедур обычно нужно и сколько это стоит</li>" +
+      '<li><span class="ci">' + R.icon("shield") + "</span>подходит ли вам процедура сейчас</li></ul>" +
+      '<button type="button" class="btn btn-gold" id="start">Начать</button></div>';
+    $("start").onclick = function () { i = 0; step() };
+  }
+
+  function step() {
+    var q = Q[i], h = '<div class="q">' + dots() + '<span class="eyebrow">вопрос ' + (i + 1) + " из " + Q.length + "</span><h2>" + q.t + "</h2>" + (q.p ? "<p>" + q.p + "</p>" : "");
+    if (q.multi) {
+      var sel = ans.zones || [];
+      h += '<div class="chips">' + R.zones.map(function (z) { return '<button type="button" class="chip' + (sel.indexOf(z.id) > -1 ? " on" : "") + '" data-z="' + z.id + '">' + z.name + "</button>" }).join("") + "</div>";
+      h += '<div class="nav"><button type="button" class="btn btn-soft" id="back">Назад</button><button type="button" class="btn btn-gold" id="next"' + (sel.length ? "" : " disabled") + ">Дальше</button></div>";
+    } else if (q.contra) {
+      h += '<p class="lock">' + R.icon("lock") + "Ответы остаются в вашем телефоне</p>";
+      h += G.map(function (g) {
+        return '<div class="grp"><h3>' + g.h + "</h3>" + g.items.map(function (t, k) {
+          var id = g.id + "-" + k;
+          return '<label class="tg" for="' + id + '"><span>' + t + '</span><input type="checkbox" id="' + id + '"' + (on[id] ? " checked" : "") + "></label>";
+        }).join("") + "</div>";
+      }).join("");
+      h += '<div class="nav"><button type="button" class="btn btn-soft" id="back">Назад</button><button type="button" class="btn btn-gold" id="fin"></button></div>';
+    } else {
+      h += '<div class="opts">' + q.o.map(function (o, k) {
+        var mark = o.s ? '<span class="sw lines" style="--c:' + o.s + '"></span>' : '<span class="num">' + (k + 1) + "</span>";
+        return '<button type="button" class="opt" data-k="' + k + '" aria-pressed="' + (ans[q.id] === k) + '">' + mark + "<span>" + o.l + (o.h ? "<small>" + o.h + "</small>" : "") + "</span></button>";
+      }).join("") + '</div><div class="nav"><button type="button" class="btn btn-soft" id="back">Назад</button></div>';
+    }
+    box.innerHTML = h + "</div>";
+    box.scrollIntoView({ block: "nearest" });
+    $("back").onclick = function () { if (i === 0) intro(); else { i--; step() } };
+    box.querySelectorAll(".opt").forEach(function (b) {
+      b.onclick = function () { ans[q.id] = +b.dataset.k; b.setAttribute("aria-pressed", "true"); setTimeout(function () { i++; step() }, 220) };
+    });
+    box.querySelectorAll("[data-z]").forEach(function (b) {
+      b.onclick = function () {
+        var z = ans.zones = ans.zones || [], k = z.indexOf(b.dataset.z);
+        if (k > -1) z.splice(k, 1); else z.push(b.dataset.z);
+        b.classList.toggle("on", k === -1);
+        $("next").disabled = !z.length;
+      };
+    });
+    if ($("next")) $("next").onclick = function () { i++; step() };
+    if ($("fin")) {
+      var label = function () { $("fin").textContent = Object.keys(on).some(function (k) { return on[k] }) ? "Показать результат" : "Ничего из этого нет" };
+      box.querySelectorAll(".tg input").forEach(function (x) { x.onchange = function () { on[x.id] = x.checked; label() } });
+      label();
+      $("fin").onclick = result;
+    }
+  }
+
+  function result() {
+    var a = picked("g1"), b = picked("g2"), c = picked("g3");
+    var V = a.length ? ["stop", "x", "Процедура вам сейчас не подходит", "По отмеченному процедуру не проводят. Если сомневаетесь, спросите Марину."]
+      : b.length ? ["stop", "clock", "Запись лучше отложить", "Дождитесь, пока это пройдёт, и выберите дату."]
+      : c.length ? ["warn", "help", "Обсудите с Мариной до записи", "Это не запрет, но Марине важно знать об этом заранее."]
+      : ["ok", "check", "Противопоказаний не отмечено", "Можно записываться. Марина ещё раз пройдёт по списку на консультации."];
+    var verdict = '<div class="verdict ' + V[0] + '"><span class="ic">' + R.icon(V[1]) + "</span><div><b>" + V[2] + "</b><span>" + V[3] + "</span></div></div>";
+
+    if (a.length) {
+      box.innerHTML = '<div class="res">' + verdict +
+        '<div class="facts"><div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>Отмечено:</b> " + R.esc(a.join("; ")) + ".</span></div></div>" +
+        '<button type="button" class="btn btn-gold" id="send">Задать вопрос Марине</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
+        '<p class="disc">Это самопроверка, а не диагноз. Окончательно решает Марина на консультации.</p></div>';
+      $("prep").hidden = true;
+      $("send").onclick = function () { R.send("Здравствуйте, Марина! В списке противопоказаний на сайте у меня отмечено: " + a.join("; ") + ". Подскажите, можно ли мне процедуру?", { title: "Вопрос Марине" }) };
+      $("again").onclick = again;
+      box.scrollIntoView({ block: "start" });
+      return;
+    }
+
+    var score = ["color", "age", "relief", "width"].reduce(function (s, id) { var q = Q.filter(function (x) { return x.id === id })[0]; return s + q.o[ans[id]].v }, 0);
+    var fresh = Q[0].o[ans.color].v < 1 && ans.age <= 1;
+    var stage = fresh ? "Свежие растяжки" : score <= 4 ? "Переходная стадия" : "Зрелые растяжки";
+    var n = score <= 2.5 ? 2 : 3, range = score <= 2.5 ? "чаще всего 2 процедуры" : score <= 5.5 ? "обычно 2–3 процедуры" : "3 и больше процедур";
+    var expect = score <= 2.5 ? "Свежие растяжки обычно откликаются лучше всего: кожа в них ещё активно восстанавливается."
+      : score <= 5.5 ? "Растяжки станут менее заметными: ближе к цвету кожи и ровнее. Изменения идут постепенно, несколько месяцев."
+      : "С такими растяжками работать дольше, а результат скромнее. Реальная цель — сделать их заметно менее видимыми.";
+    var zs = ans.zones.map(R.zone), one = zs.reduce(function (s, z) { return s + z.price }, 0);
+    var pct = Math.round(Math.min(score, 8.5) / 8.5 * 100);
+    var contra = b.length || c.length
+      ? '<div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>" + (b.length ? "Подождать:" : "Сказать Марине:") + "</b> " + R.esc(b.concat(c).join("; ")) + ".</span></div>" : "";
+
+    box.innerHTML = '<div class="res">' + verdict +
+      '<div class="res-card"><span class="k">ваш результат</span><h2>' + stage + "</h2><p>Ориентир: " + range + " на зону, интервал не меньше месяца.</p>" +
+      '<div class="meter" aria-hidden="true"><i style="width:' + Math.max(8, pct) + '%"></i></div><div class="meter-l"><span>свежие</span><span>зрелые</span></div></div>' +
+      '<div class="facts"><div class="fact"><span class="ci">' + R.icon("spark") + "</span><span><b>Чего ждать.</b> " + expect + "</span></div>" +
+      '<div class="fact"><span class="ci">' + R.icon("list") + "</span><span><b>Зоны:</b> " + zs.map(function (z) { return z.name }).join(", ") + ". Ориентир за курс: " + (zs.some(function (z) { return z.from }) ? "от " : "") + R.rub(one * n) + ".</span></div>" + contra + "</div>" +
+      '<button type="button" class="btn btn-gold" id="send">Отправить результат Марине</button>' +
+      (b.length ? "" : '<a class="btn btn-line" href="zapis.html">Выбрать день и время</a>') +
+      '<button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
+      '<p class="disc">Это ориентир по вашим ответам, а не диагноз. Точно скажет Марина, когда посмотрит зону.</p></div>';
+    $("again").onclick = again;
+    $("send").onclick = function () {
+      var line = b.length ? "Сейчас есть: " + b.join("; ") + ". Подскажите, когда можно записаться." + (c.length ? " И хочу обсудить: " + c.join("; ") + "." : "")
+        : c.length ? "Хочу обсудить до записи: " + c.join("; ") + "."
+        : "Противопоказаний по списку не отмечено.";
+      R.send("Здравствуйте, Марина! Прошла тест на сайте: " + stage.toLowerCase() + ", " + range + ".\n" +
+        "Цвет: " + Q[0].o[ans.color].l.toLowerCase() + "; давность: " + Q[1].o[ans.age].l.toLowerCase() + "; рельеф: " + Q[2].o[ans.relief].l.toLowerCase() + "; ширина: " + Q[3].o[ans.width].l.toLowerCase() + ".\n" +
+        "Зоны: " + zs.map(function (z) { return z.name }).join(", ") + ".\n" + line + "\nХочу на консультацию.", { title: "Результат теста" });
+    };
+    $("prep").hidden = false;
+    renderPrep();
+    box.scrollIntoView({ block: "start" });
+  }
+
+  function again() { ans = {}; on = {}; i = 0; step() }
+
+  // Подготовка к процедуре: дата, дни до неё, чек-лист и напоминание в календарь
+  var PREP = [["За день до процедуры", ["Не использовать скрабы, кислоты и спиртовые средства в зоне", "Не пить алкоголь"]],
+              ["В день процедуры", ["Кожа в зоне чистая и сухая", "Без масел, крема, дезодоранта и парфюма в зоне", "Надеть свободную одежду", "Кофе лучше не пить"]]];
+  var done = R.get("prep", {});
+  $("cl").innerHTML = PREP.map(function (blk, b) {
+    return "<h3>" + blk[0] + "</h3>" + blk[1].map(function (t, k) { var id = "p" + b + k; return '<label class="ck" for="' + id + '"><input type="checkbox" id="' + id + '"' + (done[id] ? " checked" : "") + "><span>" + t + "</span></label>" }).join("");
+  }).join("");
+  $("date").value = R.get("prep-date", R.ymd(R.addDays(R.today(), 3)));
+  function renderPrep() {
+    var d = $("date").value ? R.parse($("date").value) : null, n = d ? Math.round((d - R.today()) / 864e5) : null;
+    $("count").innerHTML = n == null ? "<b>—</b><span>дата не выбрана</span>" : n < 0 ? "<b>✓</b><span>уже прошла</span>" : n === 0 ? "<b>сегодня</b><span>удачи!</span>" : "<b>" + n + "</b><span>" + R.plural(n, "день", "дня", "дней") + " до процедуры</span>";
+    var boxes = document.querySelectorAll("#cl input"), ok = [].filter.call(boxes, function (x) { return x.checked }).length;
+    $("bar").style.width = Math.round(ok / boxes.length * 100) + "%";
+  }
+  document.querySelectorAll("#cl input").forEach(function (x) { x.addEventListener("change", function () { done[x.id] = x.checked; R.set("prep", done); renderPrep() }) });
+  $("date").addEventListener("change", function () { R.set("prep-date", this.value); renderPrep() });
+  $("ics").addEventListener("click", function () {
+    if (!$("date").value) { R.toast("Сначала выберите дату"); return }
+    var d = R.addDays(R.parse($("date").value), -1); d.setHours(19, 0);
+    R.saveFile("podgotovka-razdensya.ics", R.ics([{ title: "Завтра процедура Razden’sya: подготовка", start: d, minutes: 15, desc: "Без скрабов, кислот и спиртовых средств в зоне. Без алкоголя. Завтра: чистая сухая кожа, свободная одежда.", alarm: 0 }]));
+    R.toast("Открываю файл для календаря");
+  });
+
+  intro();
+})();
+</script>
+</body>
+</html>

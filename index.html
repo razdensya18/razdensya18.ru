@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Razden’sya · коррекция растяжек и шрамов, Ижевск</title>
+<meta name="description" content="Коррекция растяжек и шрамов в Ижевске: аппарат и сыворотка StriaLess. Цены, тест «Мои растяжки», запись к Марине.">
+<meta property="og:title" content="Razden’sya · коррекция растяжек и шрамов">
+<meta property="og:description" content="Ижевск, по записи. Цены, тест «Мои растяжки» и запись к Марине.">
+<meta property="og:image" content="https://razdensya18.ru/img/shapka.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+/* Тиснение: плотный хлопковый картон. При открытии пресс выдавливает монограмму, плитки поднимаются из бумаги, по фольге кнопки пробегает блеск */
+:root { --card: #ece4d6; --hi: #fffaf2; --lo: #c9bca5; --ink: #3b3024; --soft: #7a6c5a;
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .18  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") }
+html, body { background: var(--card) var(--grain) }
+body { color: var(--ink) }
+.wrap { max-width: 440px; margin: 0 auto; padding: 28px max(22px, env(safe-area-inset-left, 0px)) 40px; text-align: center }
+.head { display: flex; align-items: center; justify-content: center; gap: 14px; text-align: left }
+.seal { position: relative; flex: none; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; box-shadow: inset 3px 3px 7px var(--lo), inset -3px -3px 7px var(--hi); animation: deboss 1.6s cubic-bezier(.3,0,.2,1) .2s both }
+@keyframes deboss { from { box-shadow: inset 0 0 0 var(--lo), inset 0 0 0 var(--hi) } }
+.seal::before { content: ""; position: absolute; inset: 5px; border-radius: 50%; border: 1.2px solid transparent; background: linear-gradient(140deg, #e9c56f, #8f6c22, #e9c56f, #b8862a) border-box; -webkit-mask: linear-gradient(#000 0 0) padding-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: spin 14s linear infinite, ring 1.2s ease 1s both }
+@keyframes spin { to { transform: rotate(360deg) } }
+@keyframes ring { from { opacity: 0 } }
+.seal span { font: 400 46px/1 var(--f-display); color: var(--card); text-shadow: -1px -1px 1px var(--hi), 1px 1px 2px var(--lo), 2px 3px 5px rgba(80,60,30,.12); transform: translateY(3px); animation: press 1.6s cubic-bezier(.3,0,.2,1) .5s both }
+@keyframes press { 0% { text-shadow: 0 0 0 var(--hi), 0 0 0 var(--lo), 0 0 0 transparent; transform: translateY(3px) scale(1.12); opacity: .4 } 55% { transform: translateY(3px) scale(.96) } 100% { transform: translateY(3px) } }
+.brand { animation: show 1s ease .9s both }
+.brand b { display: block; font: 400 34px/1 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35) }
+.brand small { display: block; margin-top: 6px; font-size: 9.5px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--soft) }
+.title { margin: 40px 0 0; font: 400 clamp(36px, 10.6vw, 46px)/1.02 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35); text-wrap: balance; animation: show 1s ease 1.2s both }
+@keyframes show { from { opacity: 0; letter-spacing: .08em } }
+.slogan { margin: 14px 0 0; font-size: 11px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); animation: show 1s ease 1.4s both }
+.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch; animation: show 1s ease 1.5s both }
+.foil { position: relative; overflow: hidden; display: block; margin: 26px 0 0; padding: 18px; border-radius: 14px; text-decoration: none;
+  background: linear-gradient(115deg, #b8862a 0%, #f0d08a 30%, #c5921e 50%, #f3dc9c 70%, #a8791c 100%); background-size: 200% 100%;
+  color: #4a3810; font-weight: 800; font-size: 15.5px; letter-spacing: .04em; text-shadow: 0 1px 0 rgba(255,240,200,.6);
+  box-shadow: 0 1px 0 rgba(255,250,235,.8) inset, 0 -2px 0 rgba(90,60,10,.25) inset, 6px 8px 16px rgba(120,90,40,.25); animation: foil 4.5s ease-in-out infinite }
+@keyframes foil { 50% { background-position: 100% 0 } }
+/* плитки поднимаются из бумаги: тень растёт */
+.rv .tile[data-reveal], .rv .emb[data-reveal] { opacity: 1; transform: translateY(6px); box-shadow: 0 0 0 var(--lo), 0 0 0 var(--hi); transition: box-shadow 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1); transition-delay: calc(var(--i, 0) * 110ms) }
+.rv .tile[data-reveal].in, .rv .emb[data-reveal].in { transform: none; box-shadow: 7px 7px 16px var(--lo), -7px -7px 16px var(--hi) }
+.tiles { margin: 22px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; text-align: left }
+.tile, .emb { background: var(--card) var(--grain); box-shadow: 7px 7px 16px var(--lo), -7px -7px 16px var(--hi) }
+.tile { display: grid; gap: 10px; align-content: start; padding: 16px 14px; border-radius: 20px; text-decoration: none; color: var(--ink) }
+.tile:active, .review:active { box-shadow: inset 5px 5px 12px var(--lo), inset -5px -5px 12px var(--hi) !important }
+.dimple { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: var(--gold-t); box-shadow: inset 3px 3px 7px var(--lo), inset -3px -3px 7px var(--hi) }
+.dimple svg { width: 20px; height: 20px; fill: currentColor }
+.tile b { font: 400 21px/1.05 var(--f-display) }
+.tile .d { font-size: 12px; color: var(--soft); line-height: 1.35 }
+.h2 { margin: 42px 0 16px; font: 400 32px/1 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35) }
+.emb { border-radius: 22px; padding: 18px 16px; text-align: left }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: s }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center }
+.steps li::before { content: counter(s); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font: 400 22px/1 var(--f-display); color: var(--gold-t); box-shadow: 4px 4px 9px var(--lo), -4px -4px 9px var(--hi) }
+.steps b { display: block; font-size: 14.5px }
+.steps span { display: block; font-size: 12.5px; color: var(--soft); line-height: 1.4 }
+.price div { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--lo); box-shadow: 0 1px 0 var(--hi) }
+.price div:last-child { border-bottom: 0; box-shadow: none }
+.price span { font-size: 13.5px }
+.price b { font: 800 16px/1 var(--f-body); color: var(--gold-t); white-space: nowrap }
+.note { margin: 12px 0 0; font-size: 12.5px; color: var(--soft) }
+.review { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; text-decoration: none; color: var(--ink) }
+.review b { display: block; font: 400 22px/1.05 var(--f-display) }
+.review .d { display: block; margin-top: 3px; font-size: 12.5px; color: var(--soft) }
+.faq details { border-bottom: 1px solid var(--lo); box-shadow: 0 1px 0 var(--hi) }
+.faq details:last-child { border-bottom: 0; box-shadow: none }
+.faq summary { list-style: none; cursor: pointer; padding: 14px 0; display: flex; justify-content: space-between; gap: 10px; font-weight: 700; font-size: 14.5px }
+.faq summary::-webkit-details-marker { display: none }
+.faq summary::after { content: "+"; color: var(--gold-t); font-size: 18px; line-height: 1; transition: transform .3s }
+.faq details[open] summary::after { transform: rotate(45deg) }
+.faq p { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: var(--soft) }
+.links { display: flex; justify-content: center; gap: 18px; margin: 32px 0 0 }
+.links a { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; color: var(--soft); box-shadow: 5px 5px 12px var(--lo), -5px -5px 12px var(--hi) }
+.links a:active { box-shadow: inset 4px 4px 9px var(--lo), inset -4px -4px 9px var(--hi) }
+.links svg { width: 22px; height: 22px; fill: currentColor }
+.sign { margin: 24px 0 0; font: 400 17px/1.3 var(--f-display); color: #cbbfa9; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 #b1a38a }
+@media (prefers-reduced-motion: reduce) { .seal, .seal::before, .seal span, .brand, .title, .slogan, .intro, .foil { animation: none } }
+</style>
+</head>
+<body data-site="tisnenie">
+<main class="wrap">
+  <header class="head">
+    <div class="seal" aria-hidden="true"><span>R</span></div>
+    <div class="brand"><b>Razden’sya</b><small>Эстетика лица и тела</small></div>
+  </header>
+  <h1 class="title">Коррекция растяжек и шрамов</h1>
+  <p class="slogan">Ижевск · по записи</p>
+  <p class="intro">Аппарат и сыворотка StriaLess. Перед каждой процедурой — консультация и честный разговор о результате.</p>
+  <a class="foil" href="zapis.html">Записаться на консультацию</a>
+  <div class="tiles">
+    <a class="tile" data-reveal="0" href="kalkulyator.html"><span class="dimple" data-icon="list"></span><b>Сколько стоит курс</b><span class="d">Отметьте зоны — посчитаем</span></a>
+    <a class="tile" data-reveal="1" href="test.html"><span class="dimple" data-icon="help"></span><b>Мои растяжки</b><span class="d">Тест: сколько процедур и можно ли мне</span></a>
+    <a class="tile" data-reveal="2" href="chat.html"><span class="dimple" data-icon="chat"></span><b>Задать вопрос</b><span class="d">Помощник ответит сразу</span></a>
+    <a class="tile" data-reveal="3" href="kak-doiti.html"><span class="dimple" data-icon="route"></span><b>Как дойти</b><span class="d">Маршрут и такси</span></a>
+  </div>
+
+  <h2 class="h2">Как проходит процедура</h2>
+  <div class="emb" data-reveal><ol class="steps">
+    <li><span><b>Консультация</b><span>Смотрим зону и противопоказания, честно говорим, чего ждать</span></span></li>
+    <li><span><b>Стерильность</b><span>Одноразовые картриджи вскрывают при вас</span></span></li>
+    <li><span><b>Процедура</b><span>Аппарат прорабатывает растяжки, StriaLess успокаивает кожу</span></span></li>
+    <li><span><b>Уход дома</b><span>Памятка: что делать в первые дни</span></span></li>
+  </ol></div>
+
+  <h2 class="h2">Цены</h2>
+  <div class="emb price" data-reveal><div><span>Живот, бока, бёдра</span><b>5 000 ₽</b></div><div><span>Поясница, руки, внутр. поверхность бёдер, икры</span><b>4 000 ₽</b></div><div><span>Шрам, шов, рубец</span><b>от 2 000 ₽</b></div></div>
+  <p class="note">За одну процедуру на одну зону. Обычно нужно 2–3 процедуры.</p>
+
+  <h2 class="h2">Уже были у Марины?</h2>
+  <a class="emb review" data-reveal href="otzyv.html"><span class="dimple" data-icon="star"></span><span><b>Отзыв за 30 секунд</b><span class="d">Пара касаний — текст соберётся сам</span></span></a>
+
+  <h2 class="h2">Частые вопросы</h2>
+  <div class="emb faq" data-reveal>
+    <details><summary>Сколько процедур нужно?</summary><p>Чаще всего 2–3 на одну зону, с интервалом не меньше месяца.</p></details>
+    <details><summary>Это больно?</summary><p>Ощущения индивидуальны и зависят от зоны. Можно делать паузы.</p></details>
+    <details><summary>Когда заметен результат?</summary><p>Постепенно, несколько месяцев. Растяжка становится менее заметной; стереть её полностью не может ни одна методика.</p></details>
+  </div>
+
+  <nav class="links" aria-label="Контакты">
+    <a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a>
+    <a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a>
+    <a href="https://instagram.com/razdensya18" target="_blank" rel="noopener" aria-label="Instagram" data-icon="ig"></a>
+  </nav>
+  <p class="sign">Марина Гайнуллина</p>
+</main>
+<script src="common/brand.js"></script>
+</body>
+</html>

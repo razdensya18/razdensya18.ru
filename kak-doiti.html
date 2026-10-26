@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Как дойти · Razden’sya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="common/brand.css">
+<style>
+.map { position: relative; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); height: 230px; overflow: hidden; background-color: #e9e1d1;
+  background-image:
+    linear-gradient(112deg, transparent 44%, #fbf8f1 44%, #fbf8f1 47.5%, transparent 47.5%),
+    linear-gradient(22deg, transparent 57%, #fbf8f1 57%, #fbf8f1 59.5%, transparent 59.5%),
+    linear-gradient(0deg, transparent 66%, #fbf8f1 66%, #fbf8f1 68%, transparent 68%),
+    linear-gradient(90deg, transparent 18%, #f6f1e7 18%, #f6f1e7 19.5%, transparent 19.5%),
+    linear-gradient(90deg, rgba(122,150,112,.25) 0 16%, transparent 16%),
+    linear-gradient(0deg, rgba(150,185,205,.32) 0 14%, transparent 14%) }
+.map::after { content: ""; position: absolute; inset: auto 0 0 0; height: 70px; background: linear-gradient(transparent, var(--cream)) }
+.map .route { position: absolute; inset: 0; width: 100%; height: 100% }
+.map .pin { position: absolute; left: 60%; top: 30%; transform: translate(-50%, -100%); display: grid; justify-items: center; z-index: 1 }
+.map .pin svg { width: 40px; height: 40px; fill: var(--brown); filter: drop-shadow(0 4px 4px rgba(74,56,16,.35)) }
+.map .pin span { background: var(--dark); color: #fbf5ea; font-size: 11px; font-weight: 800; padding: 5px 9px; border-radius: 9px; margin-bottom: 4px; white-space: nowrap }
+.map .logo-text { position: absolute; left: 18px; top: 16px; font-size: 30px; z-index: 1 }
+.addr { margin-top: -26px; position: relative; z-index: 2 }
+.addr h1 { margin: 0 0 4px; font: 400 32px/1.05 var(--f-display) }
+.addr p { margin: 0; font-size: 14px; color: var(--text) }
+.addr .copy { margin-top: 8px; border: 0; background: none; color: var(--gold-t); font-weight: 800; font-size: 13px; padding: 0; cursor: pointer; display: inline-flex; gap: 6px; align-items: center }
+.addr .copy svg { width: 16px; height: 16px; fill: currentColor }
+.go { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px }
+.go a { display: grid; justify-items: center; gap: 6px; padding: 12px 4px; border-radius: 16px; background: var(--card); text-decoration: none; font-size: 12.5px; font-weight: 800; color: var(--ink); box-shadow: 0 8px 20px -16px rgba(74,56,16,.6) }
+.go .ci { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 15px }
+.go .ci svg { width: 20px; height: 20px; fill: #fff }
+.facts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px }
+.facts span { font-size: 12px; font-weight: 700; color: var(--text); background: var(--paper); border: 1px solid var(--line); padding: 6px 10px; border-radius: 999px }
+.steps { margin-top: 16px; display: grid; gap: 12px }
+.steps h2 { margin: 0; font: 400 26px/1.05 var(--f-display) }
+.step { display: grid; grid-template-columns: 112px 1fr; gap: 12px; align-items: center; background: var(--card); border-radius: 18px; padding: 10px }
+.ph { aspect-ratio: 1; border-radius: 12px; background: #e7dccb url("img/fon-shelk.jpg") center / cover; display: grid; place-content: center; text-align: center; position: relative; color: var(--gold-t) }
+.ph b { font: 400 34px/1 var(--f-display) }
+.ph small { font-size: 9.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase }
+.step h3 { margin: 0 0 3px; font-size: 14.5px }
+.step p { margin: 0; font-size: 12.5px; color: var(--text); line-height: 1.4 }
+.quick { margin-top: 16px; background: var(--dark); border-radius: 22px; padding: 16px; display: grid; gap: 8px }
+.quick .k { font-size: 10.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
+.quick .btn { min-height: 46px; font-size: 14.5px }
+.quick .btn-line { background: transparent; color: #f5ecda; border-color: rgba(220,179,90,.55) }
+.quick .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.note { font-size: 11.5px; color: var(--muted); text-align: center; margin: 10px 0 0 }
+</style>
+</head>
+<body data-page="13" data-site="tisnenie">
+<main class="col">
+  <div class="map" aria-hidden="true">
+    <span class="logo-text">Razden’sya</span>
+    <svg class="route" viewBox="0 0 400 230" preserveAspectRatio="none"><path d="M40 210 C 90 180, 120 190, 160 160 S 220 110, 240 72" fill="none" stroke="#c5921e" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/><circle cx="40" cy="210" r="7" fill="#fff" stroke="#c5921e" stroke-width="3"/></svg>
+    <div class="pin"><span>кабинет</span><svg viewBox="0 0 24 24"><path d="M12 2.5a7 7 0 0 0-7 7c0 5 7 12 7 12s7-7 7-12a7 7 0 0 0-7-7zm0 9.6a2.6 2.6 0 1 1 0-5.2 2.6 2.6 0 0 1 0 5.2z"/></svg></div>
+  </div>
+
+  <section class="card addr">
+    <span class="eyebrow">как дойти</span>
+    <h1 id="adr"></h1>
+    <p id="adr2"></p>
+    <button type="button" class="copy" id="copy" data-icon="copy">Скопировать адрес</button>
+  </section>
+
+  <nav class="go" aria-label="Маршрут">
+    <a id="ya" target="_blank" rel="noopener"><span class="ci" style="background:#e03a2f">Я</span>Яндекс Карты</a>
+    <a id="gis" target="_blank" rel="noopener"><span class="ci" style="background:#2e9b4a">2Г</span>2ГИС</a>
+    <a id="taxi" target="_blank" rel="noopener"><span class="ci" style="background:#1f1a14;color:#fc3">⟶</span>Такси</a>
+  </nav>
+  <div class="facts" id="facts"></div>
+
+  <section class="steps">
+    <h2>По шагам</h2>
+    <div id="steps"></div>
+  </section>
+
+  <section class="quick">
+    <span class="k">быстрое сообщение Марине</span>
+    <button type="button" class="btn btn-gold" data-q="Марина, я на месте, подхожу к кабинету.">Я на месте</button>
+    <div class="row">
+      <button type="button" class="btn btn-line" data-q="Марина, опаздываю минут на 10, извините!">Опаздываю на 10 мин</button>
+      <button type="button" class="btn btn-line" data-q="Марина, не могу найти вход. Подскажите, пожалуйста?">Не найду вход</button>
+    </div>
+  </section>
+  <p class="note">Фото и подписи в шагах — пример. На сайте будут настоящие снимки подъезда и двери.</p>
+
+  <div class="contacts" style="margin-top:18px"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden, $ = function (id) { return document.getElementById(id) };
+  // Адрес и точка на карте — впишем настоящие при сборке
+  var PLACE = { street: "Ижевск, улица и дом", note: "Адрес уточняется", lat: 56.8526, lon: 53.2045, facts: ["вход со двора", "домофон: кабинет", "2 этаж", "парковка у дома"] };
+  var STEPS = [
+    ["Ориентир", "Остановка и заметное здание рядом. Отсюда 3 минуты пешком."],
+    ["Вход во двор", "Арка или калитка: на фото будет видно, куда сворачивать."],
+    ["Подъезд", "Дверь с вывеской Razden’sya. Набрать на домофоне номер кабинета."],
+    ["Дверь кабинета", "Этаж и номер. Если пришли раньше, напишите Марине."]
+  ];
+  $("adr").textContent = PLACE.street; $("adr2").textContent = PLACE.note;
+  $("ya").href = "https://yandex.ru/maps/?rtext=~" + PLACE.lat + "," + PLACE.lon + "&rtt=auto";
+  $("gis").href = "https://2gis.ru/izhevsk/geo/" + PLACE.lon + "," + PLACE.lat;
+  $("taxi").href = "https://3.redirect.appmetrica.yandex.com/route?end-lat=" + PLACE.lat + "&end-lon=" + PLACE.lon + "&appmetrica_tracking_id=1178268795219780156";
+  $("facts").innerHTML = PLACE.facts.map(function (f) { return "<span>" + f + "</span>" }).join("");
+  $("steps").innerHTML = STEPS.map(function (s, k) {
+    return '<div class="step"><div class="ph"><b>' + (k + 1) + "</b><small>фото</small></div><div><h3>" + s[0] + "</h3><p>" + s[1] + "</p></div></div>";
+  }).join("");
+  $("steps").style.display = "grid"; $("steps").style.gap = "10px";
+  $("copy").addEventListener("click", function () { R.copy(PLACE.street).then(function () { R.toast("Адрес скопирован") }) });
+  document.querySelectorAll("[data-q]").forEach(function (b) { b.addEventListener("click", function () { R.send(b.dataset.q, { title: "Сообщение Марине" }) }) });
+})();
+</script>
+</body>
+</html>
