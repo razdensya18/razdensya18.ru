@@ -8,8 +8,7 @@
 <meta property="og:title" content="Razden’sya · коррекция растяжек и шрамов">
 <meta property="og:description" content="Ижевск, по записи. Цены, тест «Мои растяжки» и запись к Марине.">
 <meta property="og:image" content="https://razdensya18.ru/img/shapka.jpg">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
+<link rel="preload" href="common/mulish-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="common/brand.css">
 <style>
 /* Тиснение: плотный хлопковый картон. При открытии пресс выдавливает монограмму, плитки поднимаются из бумаги, по фольге кнопки пробегает блеск */
@@ -26,13 +25,13 @@ body { color: var(--ink) }
 @keyframes ring { from { opacity: 0 } }
 .seal span { font: 400 42px/1 var(--f-display); color: var(--card); text-shadow: -1px -1px 1px var(--hi), 1px 1px 2px var(--lo), 2px 3px 5px rgba(80,60,30,.12); transform: translateY(3px); animation: press 1.6s cubic-bezier(.3,0,.2,1) .5s both }
 @keyframes press { 0% { text-shadow: 0 0 0 var(--hi), 0 0 0 var(--lo), 0 0 0 transparent; transform: translateY(3px) scale(1.12); opacity: .4 } 55% { transform: translateY(3px) scale(.96) } 100% { transform: translateY(3px) } }
-.brand { animation: show 1s ease .9s both }
+.brand { animation: show .8s ease .3s both }
 .brand b { display: block; font: 400 32px/1 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35) }
 .brand small { display: block; margin-top: 7px; padding-left: .22em; font-size: 9.5px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--soft) }
-.title { margin: 30px 0 0; font: 400 clamp(36px, 10.6vw, 46px)/1.02 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35); text-wrap: balance; animation: show 1s ease 1.2s both }
+.title { margin: 30px 0 0; font: 400 clamp(36px, 10.6vw, 46px)/1.02 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35); text-wrap: balance; animation: show .8s ease .35s both }
 @keyframes show { from { opacity: 0; letter-spacing: .08em } }
-.slogan { margin: 14px 0 0; padding-left: .24em; font-size: 11px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); animation: show 1s ease 1.4s both }
-.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch; animation: show 1s ease 1.5s both }
+.slogan { margin: 14px 0 0; padding-left: .24em; font-size: 11px; font-weight: 800; letter-spacing: .24em; text-transform: uppercase; color: var(--soft); animation: show .8s ease .45s both }
+.intro { margin: 14px auto 0; font-size: 14px; line-height: 1.6; color: var(--soft); max-width: 31ch; animation: show .8s ease .55s both }
 .foil { position: relative; overflow: hidden; display: block; margin: 26px 0 0; padding: 18px; border-radius: 14px; text-decoration: none;
   background: linear-gradient(115deg, #b8862a 0%, #f0d08a 30%, #c5921e 50%, #f3dc9c 70%, #a8791c 100%); background-size: 200% 100%;
   color: #4a3810; font-weight: 800; font-size: 15.5px; letter-spacing: .04em; text-shadow: 0 1px 0 rgba(255,240,200,.6);
