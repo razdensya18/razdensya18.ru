@@ -8,10 +8,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="common/brand.css">
 <style>
-.map { position: relative; display: block; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); height: 270px; overflow: hidden; background-color: #e9e1d1 }
-.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; pointer-events: none }
-.map::after { content: ""; position: absolute; inset: auto 0 0 0; height: 70px; background: linear-gradient(transparent, var(--cream)) }
-.addr { margin-top: -26px; position: relative; z-index: 2 }
+.addr { margin-top: 16px }
+.map { position: relative; display: block; margin-top: 12px; aspect-ratio: 13 / 8; border-radius: 22px; overflow: hidden; background: #e9e1d1; box-shadow: 0 10px 26px -18px rgba(74,56,16,.6) }
+.map img { display: block; width: 100%; height: 100%; object-fit: cover }
+.map .open { position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 6px; background: var(--dark); color: #fbf5ea; font-size: 12px; font-weight: 800; padding: 7px 11px; border-radius: 999px }
+.map .open svg { width: 14px; height: 14px; fill: currentColor }
 .addr h1 { margin: 0 0 4px; font: 400 32px/1.05 var(--f-display) }
 .addr p { margin: 0; font-size: 14px; color: var(--text) }
 .addr .copy { margin-top: 8px; border: 0; background: none; color: var(--gold-t); font-weight: 800; font-size: 13px; padding: 0; cursor: pointer; display: inline-flex; gap: 6px; align-items: center }
@@ -33,16 +34,17 @@
 </head>
 <body data-page="13" data-site="tisnenie">
 <main class="col">
-  <a class="map" id="map" target="_blank" rel="noopener" aria-label="Открыть дом на Яндекс Картах">
-    <iframe id="mapf" title="Кабинет на карте" loading="lazy" tabindex="-1"></iframe>
-  </a>
-
   <section class="card addr">
     <span class="eyebrow">как дойти</span>
     <h1 id="adr"></h1>
     <p id="adr2"></p>
     <button type="button" class="copy" id="copy" data-icon="copy">Скопировать адрес</button>
   </section>
+
+  <a class="map" id="map" target="_blank" rel="noopener" aria-label="Открыть дом на Яндекс Картах">
+    <img id="mapi" alt="Дом на карте: ул. Архитектора Сергея Макарова, 6/1" loading="lazy" width="650" height="400">
+    <span class="open" data-icon="pin">Открыть карту</span>
+  </a>
 
   <nav class="go" aria-label="Маршрут">
     <a id="ya" target="_blank" rel="noopener"><span class="ci" style="background:#e03a2f">Я</span>Яндекс Карты</a>
@@ -71,7 +73,8 @@
   var PLACE = { street: "ул. Архитектора Сергея Макарова, 6/1", note: "2-й подъезд · ЖК Znak, Солнечные кварталы", copy: "Ижевск, ул. Архитектора Сергея Макарова, 6/1, 2-й подъезд",
     lat: 56.873392, lon: 53.315255, gis: "70030076366533952", facts: ["2-й подъезд", "ЖК Znak", "Солнечные кварталы"] };
   $("adr").textContent = PLACE.street; $("adr2").textContent = PLACE.note;
-  $("mapf").src = "https://yandex.ru/map-widget/v1/?ll=" + PLACE.lon + "%2C" + PLACE.lat + "&z=16&pt=" + PLACE.lon + "%2C" + PLACE.lat + "%2Cpm2dom";
+  $("mapi").src = "https://static-maps.yandex.ru/1.x/?ll=" + PLACE.lon + "," + PLACE.lat + "&z=16&size=650,400&l=map&pt=" + PLACE.lon + "," + PLACE.lat + ",pm2rdm";
+  $("mapi").onerror = function () { $("map").hidden = true };
   $("map").href = "https://yandex.ru/maps/?pt=" + PLACE.lon + "," + PLACE.lat + "&z=17&l=map";
   $("ya").href = "https://yandex.ru/maps/?rtext=~" + PLACE.lat + "," + PLACE.lon + "&rtt=auto";
   $("gis").href = "https://2gis.ru/izhevsk/directions/points/%7C" + PLACE.lon + "%2C" + PLACE.lat + "%3B" + PLACE.gis;
