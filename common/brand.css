@@ -111,7 +111,10 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 /* итоговые сайты: название в полоске и фон «Тиснения» на внутренних страницах */
 .pv-bar a.pv-title { background: none; justify-content: center; font: 400 21px/1 var(--f-display); letter-spacing: .01em }
 /* бренд уже в тёмной полоске: второй логотип внутренних страниц убран; на компьютере полоска собрана к центру */
-.pv-bar { padding-left: max(10px, env(safe-area-inset-left, 0px), calc(50% - 280px)); padding-right: max(10px, env(safe-area-inset-right, 0px), calc(50% - 280px)) }
+/* три колонки с равными краями: название строго по центру экрана, кнопки по краям карточек (колонка 460 − поля 16) */
+.pv-bar { display: grid; grid-template-columns: 1fr auto 1fr; padding-left: max(16px, env(safe-area-inset-left, 0px), calc(50% - 214px)); padding-right: max(16px, env(safe-area-inset-right, 0px), calc(50% - 214px)) }
+.pv-bar > :first-child { justify-self: start }
+.pv-bar > :last-child { justify-self: end; width: 36px; padding: 0; justify-content: center }
 body[data-page] main > header.top, body[data-page] main > header.hero, body[data-page] .banner .logo-text { display: none }
 body[data-page] main > h1:first-of-type { margin-top: 24px }
 html:has(> body[data-site="tisnenie"][data-page]) { background: #ece4d6 }
