@@ -9,7 +9,7 @@
     tg: "https://t.me/razdensya18",
     ig: "https://instagram.com/razdensya18",
     phone: "",
-    address: "Ижевск, адрес уточняется",
+    address: "Ижевск, ул. Архитектора Сергея Макарова, 6/1, 2-й подъезд",
     handle: "@razdensya18",
     master: "Гайнуллина Марина Руслановна"
   };
