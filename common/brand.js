@@ -123,14 +123,19 @@
     setTimeout(function () { t.remove() }, 2600);
   };
 
+  // Копирование сразу в момент нажатия: сначала через выделение текста (срабатывает и на iPhone, пока страница в фокусе),
+  // потом Clipboard API. Асинхронная запасная ветка после ухода в другое приложение уже не срабатывает
   R.copy = function (text) {
-    function fallback() {
+    var ok = false;
+    try {
       var ta = document.createElement("textarea"); ta.value = text; ta.setAttribute("readonly", "");
-      ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
-      var ok = false; try { ok = document.execCommand("copy") } catch (e) {}
-      ta.remove(); return ok;
-    }
-    try { return navigator.clipboard.writeText(text).then(function () { return true }, fallback) } catch (e) { return Promise.resolve(fallback()) }
+      ta.style.cssText = "position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;font-size:16px";
+      document.body.appendChild(ta); ta.focus({ preventScroll: true }); ta.select(); ta.setSelectionRange(0, text.length);
+      ok = document.execCommand("copy"); ta.remove();
+    } catch (e) {}
+    var api = null;
+    try { api = navigator.clipboard.writeText(text).then(function () { return true }, function () { return ok }) } catch (e) {}
+    return ok ? Promise.resolve(true) : (api || Promise.resolve(false));
   };
 
   // Шторка «Сообщение Марине»: Telegram открывается с текстом в ссылке, для ВКонтакте текст копируется и открывается чат

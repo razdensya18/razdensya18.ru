@@ -58,6 +58,11 @@ h1 { margin: 10px 0 14px; font: 400 32px/1.05 var(--f-display) }
 #go { flex: 1 }
 .nav.final { flex-direction: column-reverse }
 #go.off { opacity: .55 }
+/* ВКонтакте не умеет принимать текст в ссылке: заявка видна целиком, копируется отдельной кнопкой, потом открывается чат */
+.vk { display: grid; gap: 8px; margin-top: 14px }
+.vk-k { margin: 0; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-t) }
+.vk-msg { white-space: pre-wrap; background: var(--paper); border: 1px dashed rgba(197,146,30,.55); border-radius: 14px; padding: 12px; font-size: 13.5px; line-height: 1.45; -webkit-user-select: text; user-select: text }
+.vk .how { margin: 0 }
 textarea.input { min-height: 70px; resize: vertical }
 </style>
 </head>
@@ -95,6 +100,13 @@ textarea.input { min-height: 70px; resize: vertical }
       <div class="field" style="margin-top:12px"><label>Куда отправить заявку</label><div class="prefs" id="pref"><button type="button" class="chip on" data-p="tg">Telegram</button><button type="button" class="chip" data-p="vk">ВКонтакте</button></div><p class="how" id="how"></p></div>
       <div class="field" style="margin-top:12px"><label for="cm">Комментарий, если нужно</label><textarea class="input" id="cm" placeholder="Например: растяжки после родов, белые"></textarea></div>
       <dl class="summary" id="sum"></dl>
+      <div class="vk" id="vk" hidden>
+        <p class="vk-k">Ваша заявка</p>
+        <div class="vk-msg" id="vkMsg"></div>
+        <button type="button" class="btn btn-gold" id="vkCopy" data-icon="copy"><span id="vkCopyT">Скопировать заявку</span></button>
+        <a class="btn btn-line" id="vkOpen" target="_blank" rel="noopener" data-icon="vk">Открыть ВКонтакте</a>
+        <p class="how">В чате нажмите на поле сообщения и выберите «Вставить» — заявка появится целиком.</p>
+      </div>
     </div>
 
     <div class="step" data-step="4" hidden>
@@ -102,6 +114,7 @@ textarea.input { min-height: 70px; resize: vertical }
         <span class="ok" data-icon="check"></span>
         <h2>Заявка готова</h2>
         <p id="doneTxt"></p>
+        <button type="button" class="btn btn-line" id="recopy" data-icon="copy" hidden>Скопировать заявку ещё раз</button>
         <a class="btn btn-gold" id="resend" target="_blank" rel="noopener">Открыть чат ещё раз</a>
         <button type="button" class="btn btn-line" id="ics" data-icon="bell">Напоминание в календарь</button>
         <button type="button" class="btn btn-soft" id="again">Новая заявка</button>
@@ -129,13 +142,13 @@ textarea.input { min-height: 70px; resize: vertical }
     fallback: { startDate: "2026-10-11", work: 2, off: 2 } };
   var TIMES = ["10:00", "12:30", "15:00", "17:30"];
   var plan = R.get("rhythm", RHYTHM.fallback);
-  var st = { step: 1, zones: [], day: null, time: null, pref: R.get("pref-chat", "tg"), month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
+  var st = { step: 1, zones: [], day: null, time: null, copied: false, pref: R.get("pref-chat", "tg"), month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
   var $ = function (id) { return document.getElementById(id) };
   var CHAT = {
     tg: { label: "Записаться через Telegram", how: "Откроется чат с Мариной, сообщение уже будет вписано — останется нажать «Отправить».",
       done: "В Telegram заявка уже вписана в чат — нажмите «Отправить». Марина подтвердит время.", url: function (t) { return R.contacts.tg + "?text=" + encodeURIComponent(t) } },
-    vk: { label: "Записаться через ВКонтакте", how: "Откроется чат ВКонтакте, а текст заявки скопируется сам: вставьте его в чат и отправьте.",
-      done: "Текст заявки скопирован: вставьте его в чат ВКонтакте и отправьте. Марина подтвердит время.", url: function () { return R.contacts.vkChat } }
+    vk: { label: "Записаться через ВКонтакте", how: "ВКонтакте не умеет вставлять текст сам: скопируйте заявку кнопкой ниже, откройте чат и вставьте её.",
+      done: "Заявка скопирована: в чате ВКонтакте нажмите на поле сообщения → «Вставить» и отправьте. Марина подтвердит время.", url: function () { return R.contacts.vkChat } }
   };
 
   function dayNum(d) { return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) }
@@ -214,38 +227,55 @@ textarea.input { min-height: 70px; resize: vertical }
   $("times").addEventListener("click", function (e) { var b = e.target.closest("[data-t]"); if (b) { st.time = b.dataset.t; render() } });
   $("prevM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() - 1, 1); drawCal() });
   $("nextM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() + 1, 1); drawCal() });
-  // Кнопка «Записаться» — ссылка прямо в выбранный чат: Telegram получает текст в ссылке, для ВКонтакте текст копируется
+  // Telegram: кнопка «Записаться» — ссылка в чат с текстом. ВКонтакте: заявка на экране, «Скопировать заявку», потом «Открыть ВКонтакте»
   function chat() {
-    var c = CHAT[st.pref], ready = !!$("nm").value.trim(), url = c.url(message());
+    var c = CHAT[st.pref], vk = st.pref === "vk", ready = !!$("nm").value.trim(), url = c.url(message());
     document.querySelectorAll("#pref .chip").forEach(function (b) { b.classList.toggle("on", b.dataset.p === st.pref) });
     $("how").textContent = c.how;
-    $("go").textContent = c.label; $("go").href = url; $("resend").href = url;
+    $("go").textContent = c.label; $("go").href = url; $("resend").href = url; $("vkOpen").href = url;
+    $("go").hidden = st.step !== 3 || vk; $("vk").hidden = !vk; $("sum").hidden = vk;
     $("go").classList.toggle("off", !ready); $("go").setAttribute("aria-disabled", !ready);
+    $("vkMsg").textContent = message();
+    $("vkCopy").className = "btn " + (st.copied ? "btn-soft" : "btn-gold");
+    $("vkOpen").className = "btn " + (st.copied ? "btn-gold" : "btn-line");
+    $("vkCopyT").textContent = st.copied ? "Заявка скопирована ✓" : "Скопировать заявку";
+    $("recopy").hidden = !vk; $("resend").textContent = vk ? "Открыть ВКонтакте" : "Открыть чат ещё раз";
   }
-  function opened(e) {
-    if (st.pref === "vk") R.copy(message()).then(function () { R.toast("Текст заявки скопирован — вставьте его в чат") });
-    if (e.currentTarget.id === "go") { $("doneTxt").textContent = CHAT[st.pref].done; setTimeout(function () { st.step = 4; render() }, 300) }
+  function named(e) {
+    if ($("nm").value.trim()) return true;
+    if (e) e.preventDefault();
+    $("nm").focus(); R.toast("Напишите, как к вам обращаться"); return false;
+  }
+  function opened() { $("doneTxt").textContent = CHAT[st.pref].done; setTimeout(function () { st.step = 4; render() }, 300) }
+  function copyApp(after) {
+    R.copy(message()).then(function (ok) {
+      st.copied = ok; chat();
+      R.toast(ok ? after : "Не получилось скопировать: выделите текст заявки и скопируйте вручную");
+    });
   }
   $("pref").addEventListener("click", function (e) {
     var b = e.target.closest(".chip"); if (!b) return;
     st.pref = b.dataset.p; R.set("pref-chat", st.pref); chat();
   });
-  $("nm").addEventListener("input", chat);
-  $("cm").addEventListener("input", chat);
+  $("nm").addEventListener("input", function () { st.copied = false; chat() });
+  $("cm").addEventListener("input", function () { st.copied = false; chat() });
+  $("vkCopy").addEventListener("click", function () { if (named()) copyApp("Заявка скопирована — теперь откройте ВКонтакте и вставьте её в чат") });
+  $("vkOpen").addEventListener("click", function (e) {
+    if (!named(e)) return;
+    if (!st.copied) R.copy(message());
+    opened();
+  });
+  $("recopy").addEventListener("click", function () { copyApp("Заявка скопирована — вставьте её в чат ВКонтакте") });
   $("back").addEventListener("click", function () { st.step--; render() });
   $("next").addEventListener("click", function () { st.step++; render() });
-  $("go").addEventListener("click", function (e) {
-    if (!$("nm").value.trim()) { e.preventDefault(); $("nm").focus(); R.toast("Напишите, как к вам обращаться"); return }
-    opened(e);
-  });
-  $("resend").addEventListener("click", opened);
+  $("go").addEventListener("click", function (e) { if (named(e)) opened() });
   $("ics").addEventListener("click", function () {
     var d = R.parse(st.day), p = st.time.split(":");
     d.setHours(+p[0], +p[1]);
     R.saveFile("zapis-razdensya.ics", R.ics([{ title: "Консультация Razden’sya (ждёт подтверждения)", start: d, minutes: 60, desc: "Заявка отправлена Марине. Дождитесь подтверждения времени.", alarm: 120 }]));
     R.toast("Открываю файл для календаря");
   });
-  $("again").addEventListener("click", function () { st = { step: 1, zones: [], day: null, time: null, pref: st.pref, month: st.month }; $("nm").value = ""; $("cm").value = ""; render() });
+  $("again").addEventListener("click", function () { st = { step: 1, zones: [], day: null, time: null, copied: false, pref: st.pref, month: st.month }; $("nm").value = ""; $("cm").value = ""; render() });
   render();
 })();
 </script>
