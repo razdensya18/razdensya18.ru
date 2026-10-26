@@ -209,9 +209,10 @@
     var score = ["color", "age", "relief", "width"].reduce(function (s, id) { var q = Q.filter(function (x) { return x.id === id })[0]; return s + q.o[ans[id]].v }, 0);
     var fresh = Q[0].o[ans.color].v < 1 && ans.age <= 1;
     var stage = fresh ? "Свежие растяжки" : score <= 4 ? "Переходная стадия" : "Зрелые растяжки";
-    var n = score <= 2.5 ? 2 : 3, range = score <= 2.5 ? "чаще всего 2 процедуры" : score <= 5.5 ? "обычно 2–3 процедуры" : "3 и больше процедур";
+    // курс у Марины — 4–8 процедур на зону: свежим ближе к 4, зрелым ближе к 8
+    var n = score <= 2.5 ? 4 : score <= 5.5 ? 6 : 8, range = score <= 2.5 ? "около 4 процедур" : score <= 5.5 ? "около 6 процедур" : "ближе к 8 процедурам";
     var expect = score <= 2.5 ? "Свежие растяжки обычно откликаются лучше всего: кожа в них ещё активно восстанавливается."
-      : score <= 5.5 ? "Растяжки станут менее заметными: ближе к цвету кожи и ровнее. Изменения идут постепенно, несколько месяцев."
+      : score <= 5.5 ? "Растяжки станут менее заметными: ближе к цвету кожи и ровнее. Эффект накопительный — он растёт от процедуры к процедуре."
       : "С такими растяжками работать дольше, а результат скромнее. Реальная цель — сделать их заметно менее видимыми.";
     var zs = ans.zones.map(R.zone), one = zs.reduce(function (s, z) { return s + z.price }, 0);
     var pct = Math.round(Math.min(score, 8.5) / 8.5 * 100);
@@ -219,7 +220,7 @@
       ? '<div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>" + (b.length ? "Подождать:" : "Сказать Марине:") + "</b> " + R.esc(b.concat(c).join("; ")) + ".</span></div>" : "";
 
     box.innerHTML = '<div class="res">' + verdict +
-      '<div class="res-card"><span class="k">ваш результат</span><h2>' + stage + "</h2><p>Ориентир: " + range + " на зону, интервал не меньше месяца.</p>" +
+      '<div class="res-card"><span class="k">ваш результат</span><h2>' + stage + "</h2><p>Ориентир: " + range + " на зону (оптимальный курс — 4–8), перерыв 4–6 недель.</p>" +
       '<div class="meter" aria-hidden="true"><i style="width:' + Math.max(8, pct) + '%"></i></div><div class="meter-l"><span>свежие</span><span>зрелые</span></div></div>' +
       '<div class="facts"><div class="fact"><span class="ci">' + R.icon("spark") + "</span><span><b>Чего ждать.</b> " + expect + "</span></div>" +
       '<div class="fact"><span class="ci">' + R.icon("list") + "</span><span><b>Зоны:</b> " + zs.map(function (z) { return z.name }).join(", ") + ". Ориентир за курс: " + (zs.some(function (z) { return z.from }) ? "от " : "") + R.rub(one * n) + ".</span></div>" + contra + "</div>" +
