@@ -110,5 +110,9 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 
 /* итоговые сайты: название в полоске и фон «Тиснения» на внутренних страницах */
 .pv-bar a.pv-title { background: none; justify-content: center; font: 400 21px/1 var(--f-display); letter-spacing: .01em }
+/* бренд уже в тёмной полоске: второй логотип внутренних страниц убран; на компьютере полоска собрана к центру */
+.pv-bar { padding-left: max(10px, env(safe-area-inset-left, 0px), calc(50% - 280px)); padding-right: max(10px, env(safe-area-inset-right, 0px), calc(50% - 280px)) }
+body[data-page] main > header.top, body[data-page] main > header.hero, body[data-page] .banner .logo-text { display: none }
+body[data-page] main > h1:first-of-type { margin-top: 24px }
 html:has(> body[data-site="tisnenie"][data-page]) { background: #ece4d6 }
 body[data-site="tisnenie"][data-page] { background: #ece4d6 url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .18  0 0 0 .08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>") }
