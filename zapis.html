@@ -53,6 +53,11 @@ h1 { margin: 10px 0 14px; font: 400 32px/1.05 var(--f-display) }
 .done p { margin: 0; font-size: 13.5px; color: var(--text) }
 .done .btn { width: 100% }
 .fine { font-size: 12px; color: var(--muted); text-align: center; margin: 14px 10px 18px }
+.how { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.45 }
+.sync { margin: 10px 0 0; font-size: 12px; color: var(--muted); text-align: center }
+#go { flex: 1 }
+.nav.final { flex-direction: column-reverse }
+#go.off { opacity: .55 }
 textarea.input { min-height: 70px; resize: vertical }
 </style>
 </head>
@@ -75,18 +80,19 @@ textarea.input { min-height: 70px; resize: vertical }
 
     <div class="step" data-step="2" hidden>
       <h2>Когда удобно?</h2>
-      <p>Точками отмечены дни приёма.</p>
+      <p>Точками отмечены свободные дни Марины.</p>
       <div class="cal-head"><button type="button" id="prevM" aria-label="Предыдущий месяц"></button><b id="mName"></b><button type="button" id="nextM" aria-label="Следующий месяц"></button></div>
       <div class="grid7" id="cal"></div>
       <p class="times-l" id="timesL" hidden>Время</p>
       <div class="times" id="times"></div>
+      <p class="sync" id="sync">Свободные дни берутся из графика Марины</p>
     </div>
 
     <div class="step" data-step="3" hidden>
       <h2>Как с вами связаться?</h2>
       <p>Марина подтвердит время в сообщениях.</p>
       <div class="field"><label for="nm">Как к вам обращаться</label><input class="input" id="nm" autocomplete="given-name" placeholder="Имя"></div>
-      <div class="field" style="margin-top:12px"><label>Где удобнее переписываться</label><div class="prefs" id="pref"><button type="button" class="chip on" data-p="ВКонтакте">ВКонтакте</button><button type="button" class="chip" data-p="Telegram">Telegram</button></div></div>
+      <div class="field" style="margin-top:12px"><label>Куда отправить заявку</label><div class="prefs" id="pref"><button type="button" class="chip on" data-p="tg">Telegram</button><button type="button" class="chip" data-p="vk">ВКонтакте</button></div><p class="how" id="how"></p></div>
       <div class="field" style="margin-top:12px"><label for="cm">Комментарий, если нужно</label><textarea class="input" id="cm" placeholder="Например: растяжки после родов, белые"></textarea></div>
       <dl class="summary" id="sum"></dl>
     </div>
@@ -96,7 +102,7 @@ textarea.input { min-height: 70px; resize: vertical }
         <span class="ok" data-icon="check"></span>
         <h2>Заявка готова</h2>
         <p id="doneTxt"></p>
-        <button type="button" class="btn btn-gold" id="resend">Открыть сообщение ещё раз</button>
+        <a class="btn btn-gold" id="resend" target="_blank" rel="noopener">Открыть чат ещё раз</a>
         <button type="button" class="btn btn-line" id="ics" data-icon="bell">Напоминание в календарь</button>
         <button type="button" class="btn btn-soft" id="again">Новая заявка</button>
       </div>
@@ -105,6 +111,7 @@ textarea.input { min-height: 70px; resize: vertical }
     <div class="nav" id="nav">
       <button type="button" class="btn btn-soft" id="back">Назад</button>
       <button type="button" class="btn btn-gold" id="next">Дальше</button>
+      <a class="btn btn-gold" id="go" target="_blank" rel="noopener" hidden>Записаться</a>
     </div>
   </section>
 
@@ -116,17 +123,43 @@ textarea.input { min-height: 70px; resize: vertical }
 <script>
 (function () {
   var R = Razden;
-  // Дни приёма: дни недели (1 — пн … 7 — вс) и время. Можно привязать к графику 2×2
-  var DAYS = [2, 4, 6], TIMES = ["10:00", "12:30", "15:00", "17:30"];
-  var st = { step: 1, zones: [], day: null, time: null, pref: "ВКонтакте", month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
+  // Дни приёма — выходные Марины по «Ритму смен» (grafik-smen.github.io). График читается из его базы при каждом открытии,
+  // поэтому смена графика там сразу меняет свободные дни здесь. Если база недоступна — последний известный график
+  var RHYTHM = { db: "https://grafik-smen-eb745-default-rtdb.europe-west1.firebasedatabase.app/rooms/main/people", name: "Марина",
+    fallback: { startDate: "2026-10-11", work: 2, off: 2 } };
+  var TIMES = ["10:00", "12:30", "15:00", "17:30"];
+  var plan = R.get("rhythm", RHYTHM.fallback);
+  var st = { step: 1, zones: [], day: null, time: null, pref: R.get("pref-chat", "tg"), month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
   var $ = function (id) { return document.getElementById(id) };
+  var CHAT = {
+    tg: { label: "Записаться через Telegram", how: "Откроется чат с Мариной, сообщение уже будет вписано — останется нажать «Отправить».",
+      done: "В Telegram заявка уже вписана в чат — нажмите «Отправить». Марина подтвердит время.", url: function (t) { return R.contacts.tg + "?text=" + encodeURIComponent(t) } },
+    vk: { label: "Записаться через ВКонтакте", how: "Откроется чат ВКонтакте, а текст заявки скопируется сам: вставьте его в чат и отправьте.",
+      done: "Текст заявки скопирован: вставьте его в чат ВКонтакте и отправьте. Марина подтвердит время.", url: function () { return R.contacts.vkChat } }
+  };
+
+  function dayNum(d) { return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) }
+  function offDay(d) { var cyc = plan.work + plan.off, pos = ((dayNum(d) - dayNum(R.parse(plan.startDate))) % cyc + cyc) % cyc; return pos >= plan.work }
+  function getJSON(path) { return fetch(RHYTHM.db + path + ".json").then(function (r) { if (!r.ok) throw r.status; return r.json() }) }
+  fetch(RHYTHM.db + ".json?shallow=true").then(function (r) { return r.json() }).then(function (ids) {
+    return Promise.all(Object.keys(ids || {}).map(function (i) { return getJSON("/" + i + "/name").then(function (n) { return [i, n] }) }));
+  }).then(function (names) {
+    var hit = names.filter(function (x) { return x[1] === RHYTHM.name })[0];
+    if (!hit) throw "нет " + RHYTHM.name;
+    return Promise.all(["startDate", "work", "off"].map(function (f) { return getJSON("/" + hit[0] + "/" + f) }));
+  }).then(function (v) {
+    if (!/^\d{4}-\d\d-\d\d$/.test(v[0]) || !(v[1] > 0) || !(v[2] > 0)) throw "график";
+    plan = { startDate: v[0], work: +v[1], off: +v[2] }; R.set("rhythm", plan);
+    if (st.day && !isOpen(R.parse(st.day))) { st.day = null; st.time = null }
+    if (st.step === 2) render();
+  }).catch(function () { $("sync").textContent = "График обновится, когда появится интернет. Время всё равно подтвердит Марина" });
 
   $("zones").innerHTML = R.zones.map(function (z) {
     return '<button type="button" class="zbtn" data-z="' + z.id + '" aria-pressed="false"><b>' + z.name + "</b><span>" + (z.from ? "от " : "") + R.rub(z.price) + "</span></button>";
   }).join("") + '<button type="button" class="zbtn wide" data-z="help" aria-pressed="false"><b>Не знаю, подскажите</b><span>Разберёмся на консультации</span></button>';
   $("prevM").innerHTML = R.icon("left"); $("nextM").innerHTML = R.icon("right");
 
-  function isOpen(d) { var wd = d.getDay() || 7; return d > R.today() && DAYS.indexOf(wd) > -1 && d <= R.addDays(R.today(), 60) }
+  function isOpen(d) { return d > R.today() && d <= R.addDays(R.today(), 60) && offDay(d) }
   function zoneNames() { return st.zones.map(function (id) { return id === "help" ? "пока не знаю, нужна подсказка" : R.zone(id).name }) }
 
   function drawCal() {
@@ -149,11 +182,10 @@ textarea.input { min-height: 70px; resize: vertical }
 
   function message() {
     var d = R.parse(st.day);
-    return "Здравствуйте, Марина! Заявка на консультацию с сайта.\n" +
+    return "Здравствуйте, Марина! Хочу записаться на консультацию.\n" +
       "Зона: " + zoneNames().join(", ") + "\n" +
       "Когда: " + R.date(d, { weekday: "long", day: "numeric", month: "long" }) + ", " + st.time + "\n" +
-      "Имя: " + ($("nm").value.trim() || "—") + "\n" +
-      "Переписываться: " + st.pref + ($("cm").value.trim() ? "\nКомментарий: " + $("cm").value.trim() : "");
+      "Меня зовут " + ($("nm").value.trim() || "—") + ($("cm").value.trim() ? "\nКомментарий: " + $("cm").value.trim() : "");
   }
 
   function render() {
@@ -162,12 +194,13 @@ textarea.input { min-height: 70px; resize: vertical }
     document.querySelectorAll(".zbtn").forEach(function (b) { b.setAttribute("aria-pressed", st.zones.indexOf(b.dataset.z) > -1) });
     $("nav").hidden = st.step === 4;
     $("back").style.visibility = st.step === 1 ? "hidden" : "visible";
-    $("next").textContent = st.step === 3 ? "Отправить заявку" : "Дальше";
-    $("next").disabled = (st.step === 1 && !st.zones.length) || (st.step === 2 && !(st.day && st.time)) || (st.step === 3 && !$("nm").value.trim());
+    $("next").hidden = st.step === 3; $("go").hidden = st.step !== 3; $("nav").classList.toggle("final", st.step === 3);
+    $("next").disabled = (st.step === 1 && !st.zones.length) || (st.step === 2 && !(st.day && st.time));
     if (st.step === 2) drawCal();
     if (st.step === 3) {
       var d = R.parse(st.day);
       $("sum").innerHTML = "<div><span>Зона</span><span>" + R.esc(zoneNames().join(", ")) + "</span></div><div><span>Когда</span><span>" + R.date(d, { weekday: "short", day: "numeric", month: "long" }) + ", " + st.time + "</span></div>";
+      chat();
     }
   }
 
@@ -181,20 +214,31 @@ textarea.input { min-height: 70px; resize: vertical }
   $("times").addEventListener("click", function (e) { var b = e.target.closest("[data-t]"); if (b) { st.time = b.dataset.t; render() } });
   $("prevM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() - 1, 1); drawCal() });
   $("nextM").addEventListener("click", function () { st.month = new Date(st.month.getFullYear(), st.month.getMonth() + 1, 1); drawCal() });
+  // Кнопка «Записаться» — ссылка прямо в выбранный чат: Telegram получает текст в ссылке, для ВКонтакте текст копируется
+  function chat() {
+    var c = CHAT[st.pref], ready = !!$("nm").value.trim(), url = c.url(message());
+    document.querySelectorAll("#pref .chip").forEach(function (b) { b.classList.toggle("on", b.dataset.p === st.pref) });
+    $("how").textContent = c.how;
+    $("go").textContent = c.label; $("go").href = url; $("resend").href = url;
+    $("go").classList.toggle("off", !ready); $("go").setAttribute("aria-disabled", !ready);
+  }
+  function opened(e) {
+    if (st.pref === "vk") R.copy(message()).then(function () { R.toast("Текст заявки скопирован — вставьте его в чат") });
+    if (e.currentTarget.id === "go") { $("doneTxt").textContent = CHAT[st.pref].done; setTimeout(function () { st.step = 4; render() }, 300) }
+  }
   $("pref").addEventListener("click", function (e) {
     var b = e.target.closest(".chip"); if (!b) return;
-    st.pref = b.dataset.p; this.querySelectorAll(".chip").forEach(function (c) { c.classList.toggle("on", c === b) });
+    st.pref = b.dataset.p; R.set("pref-chat", st.pref); chat();
   });
-  $("nm").addEventListener("input", render);
+  $("nm").addEventListener("input", chat);
+  $("cm").addEventListener("input", chat);
   $("back").addEventListener("click", function () { st.step--; render() });
-  $("next").addEventListener("click", function () {
-    if (st.step < 3) { st.step++; render(); return }
-    var text = message();
-    $("doneTxt").textContent = "Осталось отправить сообщение Марине. Если чат не открылся, нажмите кнопку ниже.";
-    st.step = 4; render();
-    R.send(text, { title: "Заявка Марине" });
+  $("next").addEventListener("click", function () { st.step++; render() });
+  $("go").addEventListener("click", function (e) {
+    if (!$("nm").value.trim()) { e.preventDefault(); $("nm").focus(); R.toast("Напишите, как к вам обращаться"); return }
+    opened(e);
   });
-  $("resend").addEventListener("click", function () { R.send(message(), { title: "Заявка Марине" }) });
+  $("resend").addEventListener("click", opened);
   $("ics").addEventListener("click", function () {
     var d = R.parse(st.day), p = st.time.split(":");
     d.setHours(+p[0], +p[1]);

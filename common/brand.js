@@ -133,7 +133,7 @@
     try { return navigator.clipboard.writeText(text).then(function () { return true }, fallback) } catch (e) { return Promise.resolve(fallback()) }
   };
 
-  // Шторка «Сообщение Марине»: показывает текст, по кнопке копирует его и открывает чат
+  // Шторка «Сообщение Марине»: Telegram открывается с текстом в ссылке, для ВКонтакте текст копируется и открывается чат
   R.send = function (text, opts) {
     opts = opts || {};
     R.closeSheet();
@@ -141,10 +141,10 @@
     back.innerHTML =
       '<div class="sheet" role="dialog" aria-modal="true" aria-label="Сообщение Марине">' +
       "<h3>" + R.esc(opts.title || "Сообщение Марине") + "</h3>" +
-      '<p class="hint">Текст скопируется сам. В чате останется вставить его и отправить.</p>' +
+      '<p class="hint">В Telegram сообщение откроется уже вписанным. Во ВКонтакте текст скопируется сам — вставьте его в чат.</p>' +
       '<div class="msg"></div>' +
-      '<a class="btn btn-gold" data-go href="' + R.contacts.vkChat + '" target="_blank" rel="noopener">' + R.icon("vk") + "Скопировать и открыть ВКонтакте</a>" +
-      '<a class="btn btn-line" data-go href="' + R.contacts.tg + '" target="_blank" rel="noopener">' + R.icon("tg") + "Скопировать и открыть Telegram</a>" +
+      '<a class="btn btn-gold" data-go href="' + R.contacts.tg + "?text=" + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + R.icon("tg") + "Открыть в Telegram</a>" +
+      '<a class="btn btn-line" data-go href="' + R.contacts.vkChat + '" target="_blank" rel="noopener">' + R.icon("vk") + "Скопировать и открыть ВКонтакте</a>" +
       '<button type="button" class="btn btn-soft" data-copy>' + R.icon("copy") + "Только скопировать</button>" +
       '<button type="button" class="btn" data-close style="min-height:40px;background:none;color:var(--muted);font-weight:700">Закрыть</button>' +
       "</div>";
