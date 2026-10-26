@@ -13,7 +13,7 @@ body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; min
 .head { display: flex; align-items: center; gap: 12px; padding: 10px max(14px, env(safe-area-inset-right, 0px)) 10px max(14px, env(safe-area-inset-left, 0px)); background: rgba(255,252,246,.92); border-bottom: 1px solid var(--line) }
 .head img { width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 0 0 2px rgba(197,146,30,.5) }
 .head b { display: block; font-size: 15px }
-.head .logo-text { font-size: 22px }
+.head .ttl { display: block; font: 400 23px/1.05 var(--f-display); color: var(--ink) }
 .head span { font-size: 11.5px; color: var(--ok); font-weight: 700 }
 .head .links { margin-left: auto; display: flex; gap: 6px }
 .head .links a { width: 38px; height: 38px; border-radius: 50%; background: var(--cream-2); display: grid; place-items: center; color: var(--gold-t) }
@@ -48,7 +48,7 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 <div class="app">
   <header class="head">
     <img src="img/avatar.jpg" alt="" width="44" height="44">
-    <div><span class="logo-text">Razden’sya</span><span style="display:block">помощник · отвечает сразу</span></div>
+    <div><b class="ttl">Помощник Марины</b><span style="display:block">отвечает сразу</span></div>
     <div class="links"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a></div>
   </header>
   <div class="feed" id="feed" aria-live="polite"><span class="daytag">Помощник кабинета. Живые ответы — у Марины в ВКонтакте</span></div>

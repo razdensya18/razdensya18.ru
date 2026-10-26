@@ -9,11 +9,7 @@
 <link rel="stylesheet" href="common/brand.css">
 <style>
 /* Один тест вместо двух: пять вопросов о растяжках + шестой — противопоказания. Итог: стадия, курс, вердикт и подготовка */
-.banner { position: relative; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); aspect-ratio: 5 / 3; overflow: hidden }
-.banner img { width: 100%; height: 100%; object-fit: cover; object-position: 0 0 }
-.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(244,238,228,0) 40%, var(--cream) 100%) }
-.banner .logo-text { position: absolute; z-index: 1; right: 22px; bottom: 26px; font-size: 42px }
-.quiz { margin-top: -6px; display: grid; scroll-margin-top: calc(64px + env(safe-area-inset-top, 0px)) }
+.quiz { margin-top: 22px; display: grid; scroll-margin-top: calc(64px + env(safe-area-inset-top, 0px)) }
 .q { display: grid; gap: 14px; align-content: start; animation: in .25s ease }
 @keyframes in { from { opacity: 0; transform: translateX(16px) } }
 .dots { display: flex; gap: 6px; justify-content: center }
@@ -85,7 +81,6 @@
 </head>
 <body data-page="test" data-site="tisnenie">
 <main class="col">
-  <div class="banner"><img src="img/shapka.jpg" alt="Лайн-арт лица на шёлке"><span class="logo-text">Razden’sya</span></div>
   <section class="card quiz" id="quiz" aria-live="polite"></section>
 
   <section class="card prep" id="prep" hidden>
