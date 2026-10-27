@@ -144,8 +144,8 @@
     R.closeSheet();
     var back = document.createElement("div"); back.className = "sheet-back";
     back.innerHTML =
-      '<div class="sheet" role="dialog" aria-modal="true" aria-label="Сообщение Марине">' +
-      "<h3>" + R.esc(opts.title || "Сообщение Марине") + "</h3>" +
+      '<div class="sheet" role="dialog" aria-modal="true" aria-label="Написать мне">' +
+      "<h3>" + R.esc(opts.title || "Написать мне") + "</h3>" +
       '<p class="hint">В Telegram сообщение откроется уже вписанным. Во ВКонтакте текст скопируется сам — вставьте его в чат.</p>' +
       '<div class="msg"></div>' +
       '<a class="btn btn-gold" data-go href="' + R.contacts.tg + "?text=" + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + R.icon("tg") + "Открыть в Telegram</a>" +
@@ -235,7 +235,7 @@
     bar.innerHTML =
       '<a href="index.html">' + R.icon("left") + "Главная</a>" +
       '<a class="pv-title" href="index.html">Razden’sya</a>' +
-      '<a href="' + R.contacts.vkChat + '" target="_blank" rel="noopener" aria-label="Написать Марине во ВКонтакте">' + R.icon("vk") + "</a>";
+      '<a href="' + R.contacts.vkChat + '" target="_blank" rel="noopener" aria-label="Написать мне во ВКонтакте">' + R.icon("vk") + "</a>";
     document.body.prepend(bar);
     document.body.classList.add("pv");
   }

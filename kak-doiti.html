@@ -53,7 +53,7 @@
   <div class="facts" id="facts"></div>
 
   <section class="quick">
-    <span class="k">быстрое сообщение Марине</span>
+    <span class="k">быстрое сообщение мне</span>
     <button type="button" class="btn btn-gold" data-q="Марина, я на месте, подхожу к кабинету.">Я на месте</button>
     <div class="row">
       <button type="button" class="btn btn-line" data-q="Марина, опаздываю минут на 10, извините!">Опаздываю на 10 мин</button>
@@ -80,7 +80,7 @@
   $("taxi").href = "https://3.redirect.appmetrica.yandex.com/route?end-lat=" + PLACE.lat + "&end-lon=" + PLACE.lon + "&appmetrica_tracking_id=1178268795219780156";
   $("facts").innerHTML = PLACE.facts.map(function (f) { return "<span>" + f + "</span>" }).join("");
   $("copy").addEventListener("click", function () { R.copy(PLACE.copy).then(function () { R.toast("Адрес скопирован") }) });
-  document.querySelectorAll("[data-q]").forEach(function (b) { b.addEventListener("click", function () { R.send(b.dataset.q, { title: "Сообщение Марине" }) }) });
+  document.querySelectorAll("[data-q]").forEach(function (b) { b.addEventListener("click", function () { R.send(b.dataset.q, { title: "Написать мне" }) }) });
 })();
 </script>
 </body>

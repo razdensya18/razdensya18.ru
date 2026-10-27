@@ -84,17 +84,17 @@ textarea.input { min-height: 70px; resize: vertical }
 
     <div class="step" data-step="2" hidden>
       <h2>Когда удобно?</h2>
-      <p>Точками отмечены свободные дни Марины.</p>
+      <p>Точками отмечены дни, когда я принимаю.</p>
       <div class="cal-head"><button type="button" id="prevM" aria-label="Предыдущий месяц"></button><b id="mName"></b><button type="button" id="nextM" aria-label="Следующий месяц"></button></div>
       <div class="grid7" id="cal"></div>
       <p class="times-l" id="timesL" hidden>Время</p>
       <div class="times" id="times"></div>
-      <p class="sync" id="sync">Свободные дни берутся из графика Марины</p>
+      <p class="sync" id="sync">Свободные дни — по моему рабочему графику</p>
     </div>
 
     <div class="step" data-step="3" hidden>
       <h2>Как с вами связаться?</h2>
-      <p>Марина подтвердит время в сообщениях.</p>
+      <p>Время подтвержу в ответном сообщении.</p>
       <div class="field"><label for="nm">Как к вам обращаться</label><input class="input" id="nm" autocomplete="given-name" placeholder="Имя"></div>
       <div class="field" style="margin-top:12px"><label>Куда отправить заявку</label><div class="prefs" id="pref"><button type="button" class="chip on" data-p="tg">Telegram</button><button type="button" class="chip" data-p="vk">ВКонтакте</button></div><p class="how" id="how"></p></div>
       <div class="field" style="margin-top:12px"><label for="cm">Комментарий, если нужно</label><textarea class="input" id="cm" placeholder="Например: растяжки после родов, белые"></textarea></div>
@@ -127,7 +127,7 @@ textarea.input { min-height: 70px; resize: vertical }
     </div>
   </section>
 
-  <p class="fine">Это заявка, а не бронь: время закрепляется после ответа Марины.</p>
+  <p class="fine">Это заявка, а не бронь: время закрепляется, когда я отвечу.</p>
   <div class="contacts"></div>
   <p class="signature"></p>
 </main>
@@ -144,10 +144,10 @@ textarea.input { min-height: 70px; resize: vertical }
   var st = { step: 1, zones: [], day: null, time: null, copied: false, pref: R.get("pref-chat", "tg"), month: new Date(R.today().getFullYear(), R.today().getMonth(), 1) };
   var $ = function (id) { return document.getElementById(id) };
   var CHAT = {
-    tg: { label: "Записаться через Telegram", how: "Откроется чат с Мариной, сообщение уже будет вписано — останется нажать «Отправить».",
-      done: "В Telegram заявка уже вписана в чат — нажмите «Отправить». Марина подтвердит время.", url: function (t) { return R.contacts.tg + "?text=" + encodeURIComponent(t) } },
+    tg: { label: "Записаться через Telegram", how: "Откроется чат со мной, сообщение уже будет вписано — останется нажать «Отправить».",
+      done: "В Telegram заявка уже вписана в чат — нажмите «Отправить». Время подтвержу в ответ.", url: function (t) { return R.contacts.tg + "?text=" + encodeURIComponent(t) } },
     vk: { label: "Записаться через ВКонтакте", how: "ВКонтакте не умеет вставлять текст сам: скопируйте заявку кнопкой ниже, откройте чат и вставьте её.",
-      done: "Заявка скопирована: в чате ВКонтакте нажмите на поле сообщения → «Вставить» и отправьте. Марина подтвердит время.", url: function () { return R.contacts.vkChat } }
+      done: "Заявка скопирована: в чате ВКонтакте нажмите на поле сообщения → «Вставить» и отправьте. Время подтвержу в ответ.", url: function () { return R.contacts.vkChat } }
   };
 
   function dayNum(d) { return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5) }
@@ -164,7 +164,7 @@ textarea.input { min-height: 70px; resize: vertical }
     plan = { startDate: v[0], work: +v[1], off: +v[2] }; R.set("rhythm", plan);
     if (st.day && !isOpen(R.parse(st.day))) { st.day = null; st.time = null }
     if (st.step === 2) render();
-  }).catch(function () { $("sync").textContent = "График обновится, когда появится интернет. Время всё равно подтвердит Марина" });
+  }).catch(function () { $("sync").textContent = "График обновится, когда появится интернет. Время я всё равно подтвержу в ответ" });
 
   $("zones").innerHTML = R.zones.map(function (z) {
     return '<button type="button" class="zbtn" data-z="' + z.id + '" aria-pressed="false"><b>' + z.name + "</b><span>" + (z.from ? "от " : "") + R.rub(z.price) + "</span></button>";

@@ -64,7 +64,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
   </header>
 
   <h1>Сколько стоит ваш курс</h1>
-  <p class="lead">Отметьте зоны на фигуре, выберите число процедур, и расчёт можно сразу отправить Марине.</p>
+  <p class="lead">Отметьте зоны на фигуре, выберите число процедур, и расчёт можно сразу отправить мне.</p>
 
   <section class="card">
     <div class="body-card">
@@ -95,7 +95,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
           <button type="button" data-c="8" aria-pressed="false">8</button>
         </div>
       </div>
-      <p>Оптимальный курс — 4–8 процедур на зону, перерыв между ними 4–6 недель: так не теряется накопительный эффект. Точно скажет Марина на консультации.</p>
+      <p>Оптимальный курс — 4–8 процедур на зону, перерыв между ними 4–6 недель: так не теряется накопительный эффект. Точное число скажу на консультации.</p>
     </div>
   </section>
 
@@ -103,10 +103,10 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     <span class="k">Ориентир за курс</span>
     <span class="sum" id="sum">0 ₽</span>
     <span class="sub" id="sub">Выберите хотя бы одну зону</span>
-    <button type="button" class="btn btn-gold" id="go" disabled>Отправить расчёт Марине</button>
+    <button type="button" class="btn btn-gold" id="go" disabled>Отправить расчёт мне</button>
   </section>
 
-  <p class="note">Цена за одну процедуру на одну зону. Шрам, шов, рубец — от 2 000 ₽, точнее скажет Марина, когда посмотрит.</p>
+  <p class="note">Цена за одну процедуру на одну зону. Шрам, шов, рубец — от 2 000 ₽, точную цену скажу, когда посмотрю.</p>
   <div class="contacts"></div>
   <p class="signature"></p>
 </main>
@@ -190,7 +190,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     var text = "Здравствуйте, Марина! Расчёт с сайта:\n" +
       list.map(function (z) { return "• " + z.name + " — " + (z.from ? "от " : "") + R.rub(z.price) }).join("\n") +
       "\nПроцедур на зону: " + count + "\nОриентир за курс: " + R.rub(one * count) + "\nХочу записаться на консультацию.";
-    R.send(text, { title: "Расчёт для Марины" });
+    R.send(text, { title: "Ваш расчёт" });
   });
   drawFig();
 })();

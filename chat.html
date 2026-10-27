@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Чат-помощник · Razden’sya</title>
+<title>Частые вопросы · Razden’sya</title>
 <link rel="preload" href="common/mulish-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="common/brand.css">
 <style>
@@ -47,10 +47,10 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 <div class="app">
   <header class="head">
     <img src="img/avatar.jpg" alt="" width="44" height="44">
-    <div><b class="ttl">Помощник Марины</b><span style="display:block">отвечает сразу</span></div>
+    <div><b class="ttl">Марина</b><span style="display:block">ответы на частые вопросы</span></div>
     <div class="links"><a href="https://vk.me/razdensya18" target="_blank" rel="noopener" aria-label="ВКонтакте" data-icon="vk"></a><a href="https://t.me/razdensya18" target="_blank" rel="noopener" aria-label="Telegram" data-icon="tg"></a></div>
   </header>
-  <div class="feed" id="feed" aria-live="polite"><span class="daytag">Помощник кабинета. Живые ответы — у Марины в ВКонтакте</span></div>
+  <div class="feed" id="feed" aria-live="polite"><span class="daytag">Лично отвечаю во ВКонтакте и Telegram</span></div>
   <div class="quick" id="quick"></div>
   <form class="bar" id="bar"><input id="inp" placeholder="Напишите вопрос…" autocomplete="off" aria-label="Вопрос"><button aria-label="Отправить" data-icon="send"></button></form>
 </div>
@@ -64,8 +64,8 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
   function add(cls, html) { var d = document.createElement("div"); d.className = "msg " + cls; d.innerHTML = html; feed.appendChild(d); feed.scrollTop = feed.scrollHeight; return d }
   function say(html, chips, after) {
     quick.innerHTML = "";
-    var t = document.createElement("div"); t.className = "typing"; t.innerHTML = "<i></i><i></i><i></i>"; feed.appendChild(t); feed.scrollTop = feed.scrollHeight;
-    setTimeout(function () { t.remove(); var m = add("bot", html); if (after) after(m); setChips(chips || MENU) }, 650);
+    // без «печатает…»: это заранее собранные ответы, а не живая переписка
+    setTimeout(function () { var m = add("bot", html); if (after) after(m); setChips(chips || MENU) }, 250);
   }
   function setChips(list) { quick.innerHTML = list.map(function (c) { return '<button type="button" class="chip">' + c + "</button>" }).join("") }
   function me(text) { add("me", R.esc(text)) }
@@ -75,12 +75,12 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
       say("Цена за одну процедуру на одну зону:<div class='price'>" + R.zones.map(function (z) { return "<div><span>" + z.name + "</span><b>" + (z.from ? "от " : "") + R.rub(z.price) + "</b></div>" }).join("") + "</div>", ["Посчитать мой курс", "Записаться", "Больно ли?", "Сколько процедур?"]);
     },
     "Посчитать мой курс": function () { mode = "calc"; lead.zones = []; say("Отметьте зоны и нажмите «Готово».", zoneChips()) },
-    "Больно ли?": function () { say("Ощущения индивидуальны и зависят от зоны. Марина подскажет, как сделать процедуру комфортнее, — обсудим на консультации.", ["Сколько процедур?", "Как подготовиться?", "Записаться"]) },
-    "Сколько процедур?": function () { say("Оптимально 4–8 процедур на одну зону. Перерыв между ними — от 4 до 6 недель: так не теряется накопительный эффект. Свежим растяжкам обычно нужно меньше, старым белым больше.\n\nПервые дни коже нужен бережный уход по памятке, а результат копится от процедуры к процедуре. Полностью стереть растяжку не может ни одна методика, а сделать заметно менее видимой можно.", ["Сколько стоит?", "Записаться"]) },
+    "Больно ли?": function () { say("Ощущения индивидуальны и зависят от зоны. Подберём, как сделать процедуру комфортнее для вас, — обсудим на консультации.", ["Сколько процедур?", "Как подготовиться?", "Записаться"]) },
+    "Сколько процедур?": function () { say("Оптимально 4–8 процедур на одну зону. Перерыв между ними — от 4 до 6 недель: так не теряется накопительный эффект. Свежим растяжкам обычно нужно меньше, старым белым — больше. Точное число скажу на консультации, когда посмотрю растяжки.\n\nПервые дни коже нужен бережный уход — дам памятку. Результат копится от процедуры к процедуре. Полностью стереть растяжку не может ни одна методика, а сделать её заметно менее видимой — можно.", ["Сколько стоит?", "Записаться"]) },
     "Как подготовиться?": function () { say("<b>За день:</b> без скрабов, кислот и спиртовых средств в зоне, без алкоголя.<br><b>В день процедуры:</b> кожа чистая и сухая, без масел, крема, дезодоранта и парфюма. Свободная одежда, кофе лучше не пить.", ["Кому нельзя?", "Записаться"]) },
-    "Кому нельзя?": function () { say("Процедуру не проводим при беременности и кормлении грудью. При простуде, герпесе или воспалении в зоне — переносим запись.\n\nЕсть и другие противопоказания, они зависят от здоровья в целом — Марина подробно разбирает их на консультации. Если есть хронические заболевания или сомневаетесь, напишите Марине: она подскажет, подходит ли вам процедура.", ["Спросить Марину", "Записаться"]) },
-    "Записаться": function () { mode = "book"; lead.zones = []; say("С удовольствием помогу. Какая зона? Можно несколько, потом «Готово».", zoneChips()) },
-    "Спросить Марину": function () { R.send("Здравствуйте, Марина! У меня вопрос: ") },
+    "Кому нельзя?": function () { say("Не провожу процедуру при беременности и кормлении грудью. При простуде, герпесе или воспалении в зоне — переносим запись.\n\nЕсть и другие противопоказания, они зависят от здоровья в целом — подробно разбираю их на консультации. Если есть хронические заболевания или сомневаетесь, напишите мне — подскажу, подходит ли вам процедура.", ["Написать мне", "Записаться"]) },
+    "Записаться": function () { mode = "book"; lead.zones = []; say("С удовольствием! Какая зона? Можно несколько, потом «Готово».", zoneChips()) },
+    "Написать мне": function () { R.send("Здравствуйте, Марина! У меня вопрос: ", { title: "Ваш вопрос" }) },
     "В начало": function () { mode = null; say("Что ещё подсказать?") }
   };
   function zoneChips() { return R.zones.map(function (z) { return z.name }).concat(["Готово"]) }
@@ -97,7 +97,7 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
       me(names.join(", "));
       if (mode === "calc") {
         var one = lead.zones.reduce(function (s, id) { return s + R.zone(id).price }, 0); mode = null;
-        say("За один визит: <b>" + R.rub(one) + "</b>.\nЗа курс из 4 процедур: <b>" + R.rub(one * 4) + "</b>, из 8: <b>" + R.rub(one * 8) + "</b>.\nТочное число процедур Марина скажет на консультации.", ["Записаться", "В начало"]);
+        say("За один визит: <b>" + R.rub(one) + "</b>.\nЗа курс из 4 процедур: <b>" + R.rub(one * 4) + "</b>, из 8: <b>" + R.rub(one * 8) + "</b>.\nТочное число процедур скажу на консультации.", ["Записаться", "В начало"]);
       } else { mode = "when"; say("Когда вам удобнее?", ["Будни днём", "Будни вечером", "Выходные"]) }
       return;
     }
@@ -113,16 +113,16 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
     inp.value = ""; me(v);
     if (mode === "name") {
       lead.name = v; mode = null;
-      var text = "Здравствуйте, Марина! Заявка через помощника на сайте.\nИмя: " + lead.name + "\nЗона: " + lead.zones.map(function (id) { return R.zone(id).name }).join(", ") + "\nКогда удобно: " + lead.when.toLowerCase();
-      say("Спасибо, " + R.esc(lead.name) + "! Заявка готова. Отправьте её Марине, она подтвердит время.<button type='button' class='btn btn-gold act'>Отправить Марине</button>", ["Как подготовиться?", "В начало"], function (m) { m.querySelector(".act").onclick = function () { R.send(text, { title: "Заявка Марине" }) } });
+      var text = "Здравствуйте, Марина! Заявка с сайта.\nИмя: " + lead.name + "\nЗона: " + lead.zones.map(function (id) { return R.zone(id).name }).join(", ") + "\nКогда удобно: " + lead.when.toLowerCase();
+      say("Спасибо, " + R.esc(lead.name) + "! Заявка готова — отправьте её мне, и я подтвержу время.<button type='button' class='btn btn-gold act'>Отправить заявку</button>", ["Как подготовиться?", "В начало"], function (m) { m.querySelector(".act").onclick = function () { R.send(text, { title: "Ваша заявка" }) } });
       return;
     }
     var low = v.toLowerCase(), hit = low.match(/цен|стоит|сколько стоит|прайс/) ? "Сколько стоит?" : low.match(/боль/) ? "Больно ли?" : low.match(/сколько|процедур|курс/) ? "Сколько процедур?" : low.match(/подготов/) ? "Как подготовиться?" : low.match(/нельзя|противопок|беремен|корм/) ? "Кому нельзя?" : low.match(/запис/) ? "Записаться" : null;
     if (hit) { A[hit](); return }
-    say("Этот вопрос лучше задать Марине напрямую. Перешлю его вам в чат одной кнопкой.<button type='button' class='btn btn-gold act'>Спросить Марину</button>", MENU, function (m) { m.querySelector(".act").onclick = function () { R.send("Здравствуйте, Марина! Вопрос с сайта: " + v) } });
+    say("На этот вопрос лучше отвечу лично. Отправьте его мне одной кнопкой.<button type='button' class='btn btn-gold act'>Отправить вопрос</button>", MENU, function (m) { m.querySelector(".act").onclick = function () { R.send("Здравствуйте, Марина! Вопрос с сайта: " + v, { title: "Ваш вопрос" }) } });
   });
 
-  say("Здравствуйте! Я помощник кабинета Razden’sya. Подскажу по ценам, процедуре и записи.\nЧто интересно?");
+  say("Здравствуйте! Здесь я собрала ответы на вопросы, которые мне задают чаще всего: цены, процедура, запись.\nВыберите вопрос или напишите свой.");
 })();
 </script>
 </body>

@@ -117,14 +117,14 @@
     { id: "width", t: "Какой они ширины?", o: [
       { v: 0, l: "Тонкие нити", h: "до 2 мм" }, { v: 1, l: "Средние", h: "2–5 мм" }, { v: 2, l: "Широкие", h: "больше 5 мм" }] },
     { id: "zones", t: "Где растяжки?", p: "Можно выбрать несколько зон.", multi: true },
-    { id: "contra", t: "Есть ли у вас сейчас что-то из этого?", p: "Здесь главное. Полный список противопоказаний Марина подробно разбирает на консультации.", contra: true }
+    { id: "contra", t: "Есть ли у вас сейчас что-то из этого?", p: "Здесь главное. Полный список противопоказаний подробно разбираю на консультации.", contra: true }
   ];
   // Противопоказания: g1 — процедура не проводится, g2 — переждать, g3 — сказать Марине заранее.
   // Болезни списком не перечисляем (решение Александра 26.10.2026): они — одной строкой в g3, подробно — на консультации
   var G = [
     { id: "g1", h: "Процедура не проводится", items: ["Беременность", "Кормление грудью, меньше 6 месяцев после родов"] },
     { id: "g2", h: "Нужно подождать", items: ["Простуда или ОРВИ", "Герпес в активной фазе", "Воспаление или высыпания в зоне процедуры"] },
-    { id: "g3", h: "Обсудить с Мариной", items: ["Хроническое заболевание", "Склонность к келоидным рубцам", "Аллергия на косметику", "Родинки или образования в зоне", "Рубец моложе полугода"] }
+    { id: "g3", h: "Нужно обсудить заранее", items: ["Хроническое заболевание", "Склонность к келоидным рубцам", "Аллергия на косметику", "Родинки или образования в зоне", "Рубец моложе полугода"] }
   ];
   var ans = {}, on = {}, i = -1;
 
@@ -188,19 +188,19 @@
 
   function result() {
     var a = picked("g1"), b = picked("g2"), c = picked("g3");
-    var V = a.length ? ["stop", "x", "Процедура вам сейчас не подходит", "По отмеченному процедуру не проводят. Если сомневаетесь, спросите Марину."]
+    var V = a.length ? ["stop", "x", "Процедура вам сейчас не подходит", "По отмеченному я процедуру не провожу. Если сомневаетесь, напишите мне."]
       : b.length ? ["stop", "clock", "Запись лучше отложить", "Дождитесь, пока это пройдёт, и выберите дату."]
-      : c.length ? ["warn", "help", "Обсудите с Мариной до записи", "Это не всегда запрет. Подробно разберём на консультации — напишите Марине, она подскажет."]
-      : ["ok", "check", "Противопоказаний не отмечено", "Можно записываться. Марина ещё раз пройдёт по списку на консультации."];
+      : c.length ? ["warn", "help", "Обсудим до записи", "Это не всегда запрет. Напишите мне — разберём вместе."]
+      : ["ok", "check", "Противопоказаний не отмечено", "Можно записываться. На консультации ещё раз пройдёмся по списку вместе."];
     var verdict = '<div class="verdict ' + V[0] + '"><span class="ic">' + R.icon(V[1]) + "</span><div><b>" + V[2] + "</b><span>" + V[3] + "</span></div></div>";
 
     if (a.length) {
       box.innerHTML = '<div class="res">' + verdict +
         '<div class="facts"><div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>Отмечено:</b> " + R.esc(a.join("; ")) + ".</span></div></div>" +
-        '<button type="button" class="btn btn-gold" id="send">Задать вопрос Марине</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
-        '<p class="disc">Это самопроверка. Окончательно решает Марина на консультации.</p></div>';
+        '<button type="button" class="btn btn-gold" id="send">Написать мне</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
+        '<p class="disc">Это самопроверка. Окончательно решим на консультации.</p></div>';
       $("prep").hidden = true;
-      $("send").onclick = function () { R.send("Здравствуйте, Марина! В списке противопоказаний на сайте у меня отмечено: " + a.join("; ") + ". Подскажите, можно ли мне процедуру?", { title: "Вопрос Марине" }) };
+      $("send").onclick = function () { R.send("Здравствуйте, Марина! В списке противопоказаний на сайте у меня отмечено: " + a.join("; ") + ". Подскажите, можно ли мне процедуру?", { title: "Ваш вопрос" }) };
       $("again").onclick = again;
       box.scrollIntoView({ block: "start" });
       return;
@@ -217,17 +217,17 @@
     var zs = ans.zones.map(R.zone), one = zs.reduce(function (s, z) { return s + z.price }, 0);
     var pct = Math.round(Math.min(score, 8.5) / 8.5 * 100);
     var contra = b.length || c.length
-      ? '<div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>" + (b.length ? "Подождать:" : "Сказать Марине:") + "</b> " + R.esc(b.concat(c).join("; ")) + ".</span></div>" : "";
+      ? '<div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>" + (b.length ? "Подождать:" : "Скажите мне заранее:") + "</b> " + R.esc(b.concat(c).join("; ")) + ".</span></div>" : "";
 
     box.innerHTML = '<div class="res">' + verdict +
       '<div class="res-card"><span class="k">ваш результат</span><h2>' + stage + "</h2><p>Ориентир: " + range + " на зону (оптимальный курс — 4–8), перерыв 4–6 недель.</p>" +
       '<div class="meter" aria-hidden="true"><i style="width:' + Math.max(8, pct) + '%"></i></div><div class="meter-l"><span>свежие</span><span>зрелые</span></div></div>' +
       '<div class="facts"><div class="fact"><span class="ci">' + R.icon("spark") + "</span><span><b>Чего ждать.</b> " + expect + "</span></div>" +
       '<div class="fact"><span class="ci">' + R.icon("list") + "</span><span><b>Зоны:</b> " + zs.map(function (z) { return z.name }).join(", ") + ". Ориентир за курс: " + (zs.some(function (z) { return z.from }) ? "от " : "") + R.rub(one * n) + ".</span></div>" + contra + "</div>" +
-      '<button type="button" class="btn btn-gold" id="send">Отправить результат Марине</button>' +
+      '<button type="button" class="btn btn-gold" id="send">Отправить результат мне</button>' +
       (b.length ? "" : '<a class="btn btn-line" href="zapis.html">Выбрать день и время</a>') +
       '<button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
-      '<p class="disc">Это ориентир по вашим ответам. Точно скажет Марина, когда посмотрит зону.</p></div>';
+      '<p class="disc">Это ориентир по вашим ответам. Точно скажу, когда посмотрю зону.</p></div>';
     $("again").onclick = again;
     $("send").onclick = function () {
       var line = b.length ? "Сейчас есть: " + b.join("; ") + ". Подскажите, когда можно записаться." + (c.length ? " И хочу обсудить: " + c.join("; ") + "." : "")

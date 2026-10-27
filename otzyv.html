@@ -58,7 +58,7 @@ textarea.input { min-height: 74px; resize: vertical }
   </section>
 
   <section class="private">
-    <div><b>Есть замечание?</b><span>Можно сказать Марине лично</span></div>
+    <div><b>Есть замечание?</b><span>Можно сказать мне лично</span></div>
     <button type="button" id="priv">Написать</button>
   </section>
   <p class="fine">Отзыв публикуете вы сами. Можно написать любой: и с похвалой, и с замечаниями.</p>
@@ -109,7 +109,7 @@ textarea.input { min-height: 74px; resize: vertical }
     var nm = $("nm").value.trim();
     R.copy(t + (nm ? "\n— " + nm : "")); R.toast("Отзыв скопирован. Вставьте его в поле отзыва");
   });
-  $("priv").addEventListener("click", function () { R.send("Марина, хочу поделиться впечатлением о процедуре: ", { title: "Лично Марине" }) });
+  $("priv").addEventListener("click", function () { R.send("Марина, хочу поделиться впечатлением о процедуре: ", { title: "Написать мне лично" }) });
   render();
 })();
 </script>
