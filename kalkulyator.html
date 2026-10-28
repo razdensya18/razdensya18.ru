@@ -106,7 +106,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     <button type="button" class="btn btn-gold" id="go" disabled>Отправить расчёт мне</button>
   </section>
 
-  <p class="note">Цена за одну процедуру на одну зону. Шрам, шов, рубец — от 2 000 ₽, точную цену скажу, когда посмотрю.</p>
+  <p class="note">Цена за одну процедуру на одну зону. Шрам, шов, рубец — от 2 000 до 5 000 ₽, точную цену скажу, когда посмотрю.</p>
   <div class="contacts"></div>
   <p class="signature"></p>
 </main>
@@ -118,12 +118,14 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
   var chips = document.getElementById("chips"), side = "front";
   // Зоны поверх фигуры: [центр x, центр y, полуось x, полуось y, наклон] в пикселях картинки 495×1248
   var FIG = {
-    front: { img: "img/figura-front.png", hint: "Сзади — поясница и икры",
+    front: { img: "img/figura-front.png", hint: "Сзади — ягодицы и поясница",
       zones: [["ruki", [[122, 430, 16, 85, 12], [373, 430, 16, 85, -12]]], ["boka", [[168, 470, 13, 70, 0], [327, 470, 13, 70, 0]]],
-        ["zhivot", [[247, 465, 58, 62, 0]]], ["bedra", [[175, 720, 32, 115, -3], [320, 720, 32, 115, 3]]], ["vnutr", [[222, 735, 13, 95, 0], [273, 735, 13, 95, 0]]]] },
-    back: { img: "img/figura-back.png", hint: "Спереди — живот и внутренняя поверхность бёдер",
+        ["zhivot", [[247, 465, 58, 62, 0]]], ["bedra", [[175, 720, 32, 115, -3], [320, 720, 32, 115, 3]]], ["vnutr", [[222, 735, 13, 95, 0], [273, 735, 13, 95, 0]]],
+        ["grud", [[212, 342, 30, 34, 0], [283, 342, 30, 34, 0]]], ["ikry", [[198, 1030, 20, 70, 0], [297, 1030, 20, 70, 0]]]] },
+    back: { img: "img/figura-back.png", hint: "Спереди — грудь, живот и внутренняя поверхность бёдер",
       zones: [["ruki", [[121, 440, 16, 85, 5], [374, 440, 16, 85, -5]]], ["boka", [[158, 500, 11, 50, 0], [337, 500, 11, 50, 0]]],
-        ["poyasnica", [[247, 478, 72, 42, 0]]], ["bedra", [[195, 790, 38, 95, 0], [300, 790, 38, 95, 0]]], ["ikry", [[200, 1020, 26, 72, 0], [295, 1020, 26, 72, 0]]]] }
+        ["poyasnica", [[247, 478, 72, 42, 0]]], ["bedra", [[195, 790, 38, 95, 0], [300, 790, 38, 95, 0]]], ["ikry", [[200, 1020, 26, 72, 0], [295, 1020, 26, 72, 0]]],
+        ["yagodicy", [[201, 612, 42, 48, 0], [294, 612, 42, 48, 0]]]] }
   };
   function ell(e, cls) { return '<ellipse class="' + cls + '" cx="' + e[0] + '" cy="' + e[1] + '" rx="' + e[2] + '" ry="' + e[3] + '"' + (e[4] ? ' transform="rotate(' + e[4] + " " + e[0] + " " + e[1] + ')"' : "") + "/>" }
   function drawFig() {
@@ -138,7 +140,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     render();
   }
   chips.innerHTML = R.zones.map(function (z) {
-    return '<button type="button" class="chip" data-z="' + z.id + '" aria-pressed="false">' + z.name + " <small>" + (z.from ? "от " : "") + R.rub(z.price) + "</small></button>";
+    return '<button type="button" class="chip" data-z="' + z.id + '" aria-pressed="false">' + z.name + " <small>" + R.price(z) + "</small></button>";
   }).join("");
 
   function toggle(id) {
@@ -156,7 +158,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     var list = R.zones.filter(function (z) { return picked.indexOf(z.id) > -1 });
     var one = list.reduce(function (s, z) { return s + z.price }, 0);
     document.getElementById("picked").innerHTML = list.length
-      ? "<ul>" + list.map(function (z) { return "<li><span>" + z.name + "</span><b>" + (z.from ? "от " : "") + R.rub(z.price) + "</b></li>" }).join("") + "</ul>"
+      ? "<ul>" + list.map(function (z) { return "<li><span>" + z.name + "</span><b>" + R.price(z) + "</b></li>" }).join("") + "</ul>"
       : '<p class="empty">Нажмите на зону на фигуре или выберите её ниже.</p>';
     document.querySelectorAll("#cnt button").forEach(function (b) { b.setAttribute("aria-pressed", +b.dataset.c === count) });
     var hasFrom = list.some(function (z) { return z.from });
@@ -188,7 +190,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     var list = R.zones.filter(function (z) { return picked.indexOf(z.id) > -1 });
     var one = list.reduce(function (s, z) { return s + z.price }, 0);
     var text = "Здравствуйте, Марина! Расчёт с сайта:\n" +
-      list.map(function (z) { return "• " + z.name + " — " + (z.from ? "от " : "") + R.rub(z.price) }).join("\n") +
+      list.map(function (z) { return "• " + z.name + " — " + R.price(z) }).join("\n") +
       "\nПроцедур на зону: " + count + "\nОриентир за курс: " + R.rub(one * count) + "\nХочу записаться на консультацию.";
     R.send(text, { title: "Ваш расчёт" });
   });

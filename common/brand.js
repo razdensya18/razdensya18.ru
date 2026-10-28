@@ -16,16 +16,20 @@
 
   // Прайс по зонам (цена за одну процедуру на одну зону)
   R.zones = [
+    { id: "grud", name: "Грудь", price: 5000 },
     { id: "zhivot", name: "Живот", price: 5000 },
-    { id: "boka", name: "Бока", price: 5000 },
-    { id: "bedra", name: "Бёдра", price: 5000 },
+    { id: "yagodicy", name: "Ягодицы", price: 5000 },
+    { id: "boka", name: "Бока", price: 4000 },
+    { id: "bedra", name: "Бёдра", price: 4000 },
     { id: "vnutr", name: "Внутренняя поверхность бёдер", price: 4000 },
     { id: "ruki", name: "Руки", price: 4000 },
     { id: "poyasnica", name: "Поясница", price: 4000 },
-    { id: "ikry", name: "Икры", price: 4000 },
-    { id: "shram", name: "Шрам, шов, рубец", price: 2000, from: true }
+    { id: "ikry", name: "Икры и голени", price: 4000 },
+    { id: "shram", name: "Шрам, шов, рубец", price: 2000, from: true, to: 5000 }
   ];
   R.zone = function (id) { return R.zones.filter(function (z) { return z.id === id })[0] };
+  // Цена зоны для показа: «4 000 ₽» или вилка «2 000–5 000 ₽» (в расчётах берётся нижняя граница)
+  R.price = function (z) { return z.to ? R.rub(z.price).replace(/\s₽$/, "") + "–" + R.rub(z.to) : (z.from ? "от " : "") + R.rub(z.price) };
 
   // Список вариантов для галереи и панели просмотра
   R.variants = [

@@ -167,7 +167,7 @@ textarea.input { min-height: 70px; resize: vertical }
   }).catch(function () { $("sync").textContent = "График обновится, когда появится интернет. Время я всё равно подтвержу в ответ" });
 
   $("zones").innerHTML = R.zones.map(function (z) {
-    return '<button type="button" class="zbtn" data-z="' + z.id + '" aria-pressed="false"><b>' + z.name + "</b><span>" + (z.from ? "от " : "") + R.rub(z.price) + "</span></button>";
+    return '<button type="button" class="zbtn" data-z="' + z.id + '" aria-pressed="false"><b>' + z.name + "</b><span>" + R.price(z) + "</span></button>";
   }).join("") + '<button type="button" class="zbtn wide" data-z="help" aria-pressed="false"><b>Не знаю, подскажите</b><span>Разберёмся на консультации</span></button>';
   $("prevM").innerHTML = R.icon("left"); $("nextM").innerHTML = R.icon("right");
 
