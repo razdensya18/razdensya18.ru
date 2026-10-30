@@ -5,7 +5,7 @@
   // Контакты — правятся здесь и меняются на всех страницах. Телефон пустой: кнопки звонка скрыты
   R.contacts = {
     vkChat: "https://vk.me/razdensya18",
-    vk: "https://vk.com/razdensya18",
+    vk: "https://vk.ru/razdensya_18",
     tg: "https://t.me/razdensya18",
     ig: "https://instagram.com/razdensya18",
     avito: "https://www.avito.ru/user/f54b6cbb51d9d4f1cca938bcb7401d9d/profile?iid=8391400031#open-reviews-list",
@@ -192,7 +192,7 @@
 
   R.contactsHTML = function () {
     var c = R.contacts;
-    var h = '<a href="' + c.vkChat + '" target="_blank" rel="noopener"><span class="circ">' + R.icon("vk") + "</span>ВКонтакте</a>" +
+    var h = '<a href="' + c.vk + '" target="_blank" rel="noopener"><span class="circ">' + R.icon("vk") + "</span>ВКонтакте</a>" +
       '<a href="' + c.tg + '" target="_blank" rel="noopener"><span class="circ">' + R.icon("tg") + "</span>Telegram</a>" +
       '<a href="' + c.ig + '" target="_blank" rel="noopener"><span class="circ">' + R.icon("ig") + "</span>Instagram</a>";
     if (c.phone) h += '<a href="tel:' + c.phone + '"><span class="circ">' + R.icon("phone") + "</span>Позвонить</a>";
