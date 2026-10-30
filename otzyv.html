@@ -54,8 +54,6 @@ textarea.input { min-height: 74px; resize: vertical }
     <p class="hint-copy">Текст скопируется сам — в отзыве вставьте его</p>
     <a class="btn btn-gold" data-go="avito" target="_blank" rel="noopener"><span class="badge" style="background:rgba(255,255,255,.2)">А</span>Отзыв на Авито</a>
     <a class="btn btn-line" data-go="vk" target="_blank" rel="noopener"><span class="badge" style="background:#0077ff">VK</span>Отзыв во ВКонтакте</a>
-    <a class="btn btn-line" data-go="ya" target="_blank" rel="noopener"><span class="badge" style="background:#e03a2f">Я</span>Отзыв на Яндекс Картах</a>
-    <a class="btn btn-line" data-go="gis" target="_blank" rel="noopener"><span class="badge" style="background:#2e9b4a">2Г</span>Отзыв в 2ГИС</a>
   </section>
 
   <section class="private">
@@ -72,7 +70,7 @@ textarea.input { min-height: 74px; resize: vertical }
 (function () {
   var R = Razden, $ = function (id) { return document.getElementById(id) };
   // Куда вести: страница ВКонтакте и карточки на картах — поправить при сборке
-  var LINKS = { avito: R.contacts.avito, vk: R.contacts.vk, ya: "https://yandex.ru/maps/?text=Razden%E2%80%99sya%20%D0%98%D0%B6%D0%B5%D0%B2%D1%81%D0%BA", gis: "https://2gis.ru/izhevsk/search/Razdensya" };
+  var LINKS = { avito: R.contacts.avito, vk: R.contacts.vk };
   var LIKES = [
     ["shield", "Чисто и аккуратно", "всё чисто и аккуратно, расходники вскрыли при мне"],
     ["help", "Всё объяснила", "Марина подробно рассказала, как проходит процедура и чего ждать"],
