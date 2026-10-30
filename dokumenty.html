@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Документы · Razden’sya</title>
+<link rel="preload" href="common/mulish-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="common/brand.css">
+<style>
+/* Документы: сертификат Марины, декларация и состав сыворотки. Превью открывают полный размер, PDF — оригинал */
+h1 { margin: 6px 0 4px; font: 400 36px/1.02 var(--f-display); text-align: center }
+.lead { margin: 0 0 18px; text-align: center; font-size: 14px; color: var(--text) }
+.doc { display: grid; grid-template-columns: 112px 1fr; gap: 14px; align-items: start; margin-bottom: 14px }
+.doc.two { grid-template-columns: 1fr }
+.thumbs { display: flex; gap: 10px }
+.pv { display: block; flex: 0 0 112px; border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px var(--line), 0 10px 22px -16px rgba(74,56,16,.7) }
+.pv img { display: block; width: 100%; height: auto }
+.doc h2 { margin: 2px 0 6px; font: 400 23px/1.08 var(--f-display) }
+.doc p { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: var(--text) }
+.doc .num { font-variant-numeric: tabular-nums; white-space: nowrap }
+.doc p { overflow-wrap: anywhere }
+.acts { display: flex; flex-wrap: wrap; gap: 8px }
+.acts .btn { min-height: 40px; padding: 0 14px; font-size: 13.5px; width: auto }
+.fine { margin: 6px 8px 18px; text-align: center; font-size: 12px; color: var(--muted) }
+</style>
+</head>
+<body data-page="docs" data-site="tisnenie">
+<main class="col">
+  <h1>Документы</h1>
+  <p class="lead">Мой сертификат об обучении и документы на сыворотку, с которой я работаю.</p>
+
+  <section class="card doc">
+    <a class="pv" href="docs/sertifikat.jpg" target="_blank" rel="noopener"><img src="docs/sertifikat-mini.jpg" alt="Сертификат StriaLess о прохождении обучения, Гайнуллина Марина" width="112" height="158" loading="lazy"></a>
+    <div>
+      <span class="eyebrow">обучение</span>
+      <h2>Сертификат</h2>
+      <p>Курс теоретического и практического обучения эстетической коррекции растяжек и шрамов по технике StriaLess. Тренер — Н. С. Дроздова, выдан <span class="num">12.10.2026</span>.</p>
+      <div class="acts"><a class="btn btn-line" href="docs/sertifikat.jpg" target="_blank" rel="noopener">Открыть</a></div>
+    </div>
+  </section>
+
+  <section class="card doc">
+    <a class="pv" href="docs/declaration.jpg" target="_blank" rel="noopener"><img src="docs/declaration-mini.jpg" alt="Декларация о соответствии ЕАЭС на сыворотку от растяжек STRIALESS" width="112" height="158" loading="lazy"></a>
+    <div>
+      <span class="eyebrow">сыворотка</span>
+      <h2>Декларация соответствия ЕАЭС</h2>
+      <p>Сыворотка от растяжек StriaLess соответствует техническому регламенту «О безопасности парфюмерно-косметической продукции» (ТР ТС 009/2011). Номер декларации: ЕАЭС № BY/112&nbsp;11.01. ТР009&nbsp;122.01&nbsp;30617, действует до <span class="num">24.04.2031</span>.</p>
+      <div class="acts"><a class="btn btn-line" href="docs/declaration.jpg" target="_blank" rel="noopener">Открыть</a><a class="btn btn-soft" href="docs/declaration-strialess.pdf" target="_blank" rel="noopener">PDF</a></div>
+    </div>
+  </section>
+
+  <section class="card doc two">
+    <div>
+      <span class="eyebrow">сыворотка</span>
+      <h2>Состав StriaLess</h2>
+      <p>ПДРН, трегалоза, гиалуроновая и молочная кислоты, витамин C, пантенол, аллантоин и экстракты центеллы, алоэ и зелёного чая — что делает каждый компонент.</p>
+    </div>
+    <div class="thumbs">
+      <a class="pv" href="docs/kartochka-1.jpg" target="_blank" rel="noopener"><img src="docs/kartochka-1-mini.jpg" alt="Состав StriaLess, страница 1" width="112" height="159" loading="lazy"></a>
+      <a class="pv" href="docs/kartochka-2.jpg" target="_blank" rel="noopener"><img src="docs/kartochka-2-mini.jpg" alt="Состав StriaLess, страница 2" width="112" height="159" loading="lazy"></a>
+    </div>
+    <div class="acts"><a class="btn btn-line" href="docs/kartochka-1.jpg" target="_blank" rel="noopener">Страница 1</a><a class="btn btn-line" href="docs/kartochka-2.jpg" target="_blank" rel="noopener">Страница 2</a><a class="btn btn-soft" href="docs/kartochka-strialess.pdf" target="_blank" rel="noopener">PDF</a></div>
+  </section>
+
+  <p class="fine">Нажмите на документ, чтобы открыть его в полном размере.</p>
+  <div class="contacts"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+</body>
+</html>

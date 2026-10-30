@@ -48,6 +48,12 @@ body { color: var(--ink) }
 .dimple svg { width: 20px; height: 20px; fill: currentColor }
 .tile b { font: 400 21px/1.05 var(--f-display) }
 .tile .d { font-size: 12px; color: var(--soft); line-height: 1.35 }
+.trust { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px }
+.trust .tile { justify-items: center; text-align: center; gap: 8px; padding: 14px 6px 12px }
+.trust .tile b { font-size: 16px; line-height: 1.1 }
+.trust .tile .d { font-size: 11px }
+.trust .soon .dimple, .trust .soon b { opacity: .5 }
+.trust .soon .d { font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: 9.5px }
 .h2 { margin: 42px 0 16px; font: 400 32px/1 var(--f-display); color: #9d8d72; text-shadow: 1px 1px 0 var(--hi), -1px -1px 0 rgba(120,100,70,.35) }
 .emb { border-radius: 22px; padding: 18px 16px; text-align: left }
 .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; counter-reset: s }
@@ -107,6 +113,13 @@ body { color: var(--ink) }
   <h2 class="h2">Цены</h2>
   <div class="emb price" data-reveal><div><span>Грудь, живот, ягодицы</span><b>5 000 ₽</b></div><div><span>Руки, бока, бёдра, поясница, ноги и другие зоны</span><b>4 000 ₽</b></div><div><span>Шрам, шов, рубец</span><b>2 000–5 000 ₽</b></div></div>
   <p class="note">За одну процедуру на одну зону. Оптимальный курс — 4–8 процедур.</p>
+
+  <h2 class="h2">Результаты и доверие</h2>
+  <div class="trust">
+    <div class="tile soon" data-reveal="0"><span class="dimple" data-icon="camera"></span><b>До и после</b><span class="d">скоро</span></div>
+    <div class="tile soon" data-reveal="1"><span class="dimple" data-icon="star"></span><b>Отзывы</b><span class="d">скоро</span></div>
+    <a class="tile" data-reveal="2" href="dokumenty.html"><span class="dimple" data-icon="shield"></span><b>Документы</b><span class="d">Сертификат и сыворотка</span></a>
+  </div>
 
   <h2 class="h2">Уже были на процедуре?</h2>
   <a class="emb review" data-reveal href="otzyv.html"><span class="dimple" data-icon="star"></span><span><b>Отзыв за 30 секунд</b><span class="d">Пара касаний — текст соберётся сам</span></span></a>
