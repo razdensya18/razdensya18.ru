@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Отзывы · Razden’sya</title>
+<link rel="preload" href="common/mulish-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="common/brand.css">
+<style>
+/* Отзывы клиенток с Авито. Новый отзыв — добавить запись в начало REVIEWS (дата, имя как на Авито с сокращённой фамилией, оценка, услуга, текст без правок) */
+h1 { margin: 6px 0 4px; font: 400 36px/1.02 var(--f-display); text-align: center }
+.lead { margin: 0 0 16px; text-align: center; font-size: 14px; color: var(--text) }
+.sum { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; margin-bottom: 14px }
+.sum .big { font: 400 46px/1 var(--f-display); color: var(--gold-t) }
+.sum small { display: block; font-size: 12.5px; color: var(--muted); margin-top: 3px }
+.stars { display: inline-flex; gap: 2px; color: #e2a92b }
+.stars svg { width: 17px; height: 17px; fill: currentColor }
+.rev { margin-bottom: 12px }
+.rev .who { display: grid; grid-template-columns: 42px 1fr; gap: 12px; align-items: center; margin-bottom: 10px }
+.rev .ava { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--g-btn); color: #fff8ea; font-weight: 800; font-size: 17px }
+.rev b { display: block; font-size: 15px }
+.rev .meta { font-size: 12px; color: var(--muted) }
+.rev .svc { display: block; margin: 6px 0 8px; font-size: 12px; font-weight: 700; color: var(--gold-t) }
+.rev p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--ink); white-space: pre-line }
+.src { display: block; margin-top: 10px; font-size: 11.5px; color: var(--muted) }
+.acts { display: grid; gap: 8px; margin: 6px 0 14px }
+.fine { margin: 0 8px 18px; text-align: center; font-size: 12px; color: var(--muted) }
+</style>
+</head>
+<body data-page="reviews" data-site="tisnenie">
+<main class="col">
+  <h1>Отзывы</h1>
+  <p class="lead">Отзывы клиенток с моей страницы на Авито.</p>
+
+  <section class="card sum" id="sum"></section>
+  <div id="list"></div>
+
+  <div class="acts">
+    <a class="btn btn-gold" id="all" target="_blank" rel="noopener" data-icon="star">Все отзывы на Авито</a>
+    <a class="btn btn-line" href="otzyv.html">Были у меня? Оставьте отзыв</a>
+  </div>
+  <p class="fine">Отзывы перенесены с Авито без правок. Фамилии сокращены.</p>
+  <div class="contacts"></div>
+  <p class="signature"></p>
+</main>
+<script src="common/brand.js"></script>
+<script>
+(function () {
+  var R = Razden;
+  var REVIEWS = [
+    { d: "2026-10-28", name: "Света К.", stars: 5, svc: "Коррекция растяжек",
+      text: "Все прошло замечательно, мастер очень внимательная,милая и компетентная девушка. Подробно объяснила о процедуре и об уходе. Сама процедура была выполнена быстро и качественно, и абсолютно безболезненно, хотя мастер говорила, что могуть быть неприятные ощущения.\nМеня очень беспокоили растяжки после родов, и ура, в нашем городе появился человек,который может помочь.\nОднозначно рекомендую, записывайтесь, не пожалеете)" }
+  ];
+  function stars(n) { var h = ""; for (var i = 0; i < 5; i++) h += i < n ? R.icon("star") : ""; return '<span class="stars" aria-label="Оценка ' + n + ' из 5">' + h + "</span>" }
+  var avg = REVIEWS.reduce(function (s, r) { return s + r.stars }, 0) / REVIEWS.length;
+  document.getElementById("sum").innerHTML = '<span class="big">' + avg.toFixed(1).replace(".", ",") + "</span><div>" + stars(Math.round(avg)) +
+    "<small>" + REVIEWS.length + " " + R.plural(REVIEWS.length, "отзыв", "отзыва", "отзывов") + " на Авито</small></div>";
+  document.getElementById("list").innerHTML = REVIEWS.map(function (r) {
+    return '<article class="card rev"><div class="who"><span class="ava">' + R.esc(r.name.charAt(0)) + "</span><div><b>" + R.esc(r.name) + '</b><span class="meta">' + R.date(R.parse(r.d), { day: "numeric", month: "long", year: "numeric" }) + "</span></div></div>" +
+      stars(r.stars) + '<span class="svc">' + R.esc(r.svc) + "</span><p>" + R.esc(r.text) + '</p><span class="src">Отзыв с Авито</span></article>';
+  }).join("");
+  document.getElementById("all").href = R.contacts.avito;
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@
     vk: "https://vk.com/razdensya18",
     tg: "https://t.me/razdensya18",
     ig: "https://instagram.com/razdensya18",
+    avito: "https://www.avito.ru/user/f54b6cbb51d9d4f1cca938bcb7401d9d/profile?iid=8391400031#open-reviews-list",
     phone: "",
     address: "Ижевск, ул. Архитектора Сергея Макарова, 6/1, 2-й подъезд",
     handle: "@razdensya18",
