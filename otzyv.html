@@ -51,9 +51,10 @@ textarea.input { min-height: 74px; resize: vertical }
 
   <section class="where">
     <span class="k">где опубликовать</span>
-    <p class="hint-copy">Текст скопируется сам — в отзыве вставьте его</p>
-    <a class="btn btn-gold" data-go="avito" target="_blank" rel="noopener"><span class="badge" style="background:rgba(255,255,255,.2)">А</span>Отзыв на Авито</a>
-    <a class="btn btn-line" data-go="vk" target="_blank" rel="noopener"><span class="badge" style="background:#0077ff">VK</span>Отзыв во ВКонтакте</a>
+    <button type="button" class="btn btn-gold" id="copyR" data-icon="copy"><span id="copyT">Шаг 1. Скопировать отзыв</span></button>
+    <a class="btn btn-line" data-go="avito" target="_blank" rel="noopener"><span class="badge" style="background:#97cf26">А</span>Шаг 2. Открыть Авито</a>
+    <a class="btn btn-line" data-go="vk" target="_blank" rel="noopener"><span class="badge" style="background:#0077ff">VK</span>или группу ВКонтакте</a>
+    <p class="hint-copy">Текст сохранится здесь, даже если уйдёте со страницы. На Авито отзыв оставляют те, кто писал мне там: откройте наш диалог или мой профиль, найдите кнопку отзыва и вставьте текст.</p>
   </section>
 
   <section class="private">
@@ -80,7 +81,9 @@ textarea.input { min-height: 74px; resize: vertical }
     ["clock", "Удобная запись", "записаться было легко, приняли вовремя"],
     ["spark", "Честно о результате", "честно сказала, какого результата ждать, без обещаний «навсегда»"]
   ];
-  var on = R.get("review-likes", [0, 1, 4]);
+  var on = R.get("review-likes", [0, 1, 4]), copied = false;
+  // черновик не пропадает: свои слова и подпись хранятся в телефоне, пока клиентка ходит на Авито и обратно
+  $("own").value = R.get("review-own", ""); $("nm").value = R.get("review-nm", "");
   $("likes").innerHTML = LIKES.map(function (l, k) { return '<button type="button" class="chip" data-k="' + k + '">' + R.icon(l[0]) + l[1] + "</button>" }).join("");
   document.querySelectorAll("[data-go]").forEach(function (a) { a.href = LINKS[a.dataset.go] });
 
@@ -98,15 +101,26 @@ textarea.input { min-height: 74px; resize: vertical }
     $("txt").textContent = t || "Отметьте хотя бы одну плашку или напишите пару слов";
     $("txt").classList.toggle("empty", !t);
     $("who").textContent = nm ? "— " + nm : "";
-    R.set("review-likes", on);
+    R.set("review-likes", on); R.set("review-own", $("own").value); R.set("review-nm", nm);
+    $("copyT").textContent = copied ? "Отзыв скопирован ✓" : "Шаг 1. Скопировать отзыв";
+    $("copyR").className = "btn " + (copied ? "btn-soft" : "btn-gold");
+    document.querySelector('[data-go="avito"]').className = "btn " + (copied ? "btn-gold" : "btn-line");
   }
-  $("likes").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (!b) return; var k = +b.dataset.k, i = on.indexOf(k); if (i > -1) on.splice(i, 1); else on.push(k); render() });
-  $("own").addEventListener("input", render); $("nm").addEventListener("input", render);
+  function full() { var nm = $("nm").value.trim(); return text() + (nm ? "\n— " + nm : "") }
+  $("likes").addEventListener("click", function (e) { var b = e.target.closest(".chip"); if (!b) return; var k = +b.dataset.k, i = on.indexOf(k); if (i > -1) on.splice(i, 1); else on.push(k); copied = false; render() });
+  $("own").addEventListener("input", function () { copied = false; render() }); $("nm").addEventListener("input", function () { copied = false; render() });
+  // шаг 1 — отдельное нажатие: копирование в момент ухода в приложение Авито не успевает сработать
+  $("copyR").addEventListener("click", function () {
+    if (!text()) { R.toast("Сначала отметьте, что понравилось"); return }
+    R.copy(full()).then(function (ok) {
+      copied = ok; render();
+      R.toast(ok ? "Отзыв скопирован — откройте Авито и вставьте его" : "Не получилось скопировать: выделите текст отзыва и скопируйте вручную");
+    });
+  });
   document.querySelector(".where").addEventListener("click", function (e) {
     var a = e.target.closest("[data-go]"); if (!a) return;
-    var t = text(); if (!t) { e.preventDefault(); R.toast("Сначала отметьте, что понравилось"); return }
-    var nm = $("nm").value.trim();
-    R.copy(t + (nm ? "\n— " + nm : "")); R.toast("Отзыв скопирован. Вставьте его в поле отзыва");
+    if (!text()) { e.preventDefault(); R.toast("Сначала отметьте, что понравилось"); return }
+    if (!copied) R.copy(full());
   });
   $("priv").addEventListener("click", function () { R.send("Марина, хочу поделиться впечатлением о процедуре: ", { title: "Написать мне лично" }) });
   render();
