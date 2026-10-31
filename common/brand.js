@@ -105,7 +105,8 @@
     chart: '<path d="M4 20V10h3v10zm6.5 0V4h3v16zM17 20v-7h3v7z"/>',
     users: '<path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.5 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 19c0-3 3.1-5 7-5s7 2 7 5v1H2zm15.5-4.8c2.7.4 4.5 2 4.5 4.3V20h-4v-1c0-1.9-.2-3.4-.5-4.8z"/>',
     route: '<path d="M6 3a3 3 0 0 0-1 5.8V21h2V8.8A3 3 0 0 0 6 3zm12 0a3 3 0 0 0-1 5.8V12c0 1-1 2-2 2H9v2h6c2.2 0 4-1.8 4-4V8.8A3 3 0 0 0 18 3z"/>',
-    flag: '<path d="M5 2h2v20H5zm3 1h11l-2.5 4.5L19 12H8z"/>'
+    flag: '<path d="M5 2h2v20H5zm3 1h11l-2.5 4.5L19 12H8z"/>',
+    info: '<path d="M12 2.5a9.5 9.5 0 1 0 0 19 9.5 9.5 0 0 0 0-19zm1 15h-2v-6.5h2zm0-8.5h-2V7h2z"/>'
   };
   R.icon = function (name, cls) { return '<svg class="' + (cls || "ico") + '" viewBox="0 0 24 24" aria-hidden="true">' + (P[name] || "") + "</svg>" };
 
