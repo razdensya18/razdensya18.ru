@@ -228,6 +228,15 @@
 
   // ---------- при загрузке ----------
   function boot() {
+
+  // Плашка о cookie: один раз, пока не нажмут «Понятно»; ссылка на политику конфиденциальности
+  (function () {
+    if (R.get("cookie-ok", false)) return;
+    var b = document.createElement("div"); b.className = "cookie";
+    b.innerHTML = '<span>Сайт использует cookie и Яндекс Метрику для статистики. <a href="politika.html">Подробнее</a></span><button type="button">Понятно</button>';
+    b.querySelector("button").onclick = function () { R.set("cookie-ok", true); b.remove() };
+    document.body.appendChild(b);
+  })();
     keepScroll();
     R.reveal();
     document.querySelectorAll(".contacts:empty").forEach(function (el) { el.innerHTML = R.contactsHTML() });

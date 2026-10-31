@@ -110,6 +110,9 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important }
 }
+.cookie { position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 80; max-width: 436px; margin: 0 auto; display: flex; gap: 10px; align-items: center; padding: 10px 10px 10px 14px; border-radius: 16px; background: rgba(31,26,20,.94); color: #f6eedf; font-size: 12px; line-height: 1.4; box-shadow: 0 14px 30px -14px rgba(0,0,0,.6) }
+.cookie a { color: #dcb35a }
+.cookie button { flex: none; border: 0; border-radius: 10px; padding: 9px 12px; background: #c5921e; color: #1f1a14; font: 800 12.5px/1 var(--f-body); cursor: pointer }
 
 /* итоговые сайты: название в полоске и фон «Тиснения» на внутренних страницах */
 .pv-bar a.pv-title { background: none; justify-content: center; font: 400 21px/1 var(--f-display); letter-spacing: .01em }
