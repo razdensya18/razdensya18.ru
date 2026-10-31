@@ -26,7 +26,7 @@
     { id: "ruki", name: "Руки", price: 4000 },
     { id: "poyasnica", name: "Поясница", price: 4000 },
     { id: "ikry", name: "Икры и голени", price: 4000 },
-    { id: "shram", name: "Шрам, шов, рубец", price: 2000, from: true, to: 5000 }
+    { id: "shram", name: "Рубец, шов", price: 2000, from: true, to: 5000 }
   ];
   R.zone = function (id) { return R.zones.filter(function (z) { return z.id === id })[0] };
   // Цена зоны для показа: «4 000 ₽» или вилка «2 000–5 000 ₽» (в расчётах берётся нижняя граница)
