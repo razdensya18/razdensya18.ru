@@ -199,7 +199,7 @@
     if (a.length) {
       box.innerHTML = '<div class="res">' + verdict +
         '<div class="facts"><div class="fact"><span class="ci">' + R.icon("shield") + "</span><span><b>Отмечено:</b> " + R.esc(a.join("; ")) + ".</span></div></div>" +
-        '<button type="button" class="btn btn-gold" id="send">Написать мне</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
+        '<button type="button" class="btn btn-gold" id="send">Написать мне в Telegram</button><button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
         '<p class="disc">Это самопроверка. Окончательно решим на консультации.</p></div>';
       $("prep").hidden = true;
       $("send").onclick = function () { R.send("Здравствуйте, Марина! В списке противопоказаний на сайте у меня отмечено: " + a.join("; ") + ". Подскажите, можно ли мне процедуру?", { title: "Ваш вопрос" }) };
@@ -226,18 +226,20 @@
       '<div class="meter" aria-hidden="true"><i style="width:' + Math.max(8, pct) + '%"></i></div><div class="meter-l"><span>свежие</span><span>зрелые</span></div></div>' +
       '<div class="facts"><div class="fact"><span class="ci">' + R.icon("spark") + "</span><span><b>Чего ждать.</b> " + expect + "</span></div>" +
       '<div class="fact"><span class="ci">' + R.icon("list") + "</span><span><b>Зоны:</b> " + zs.map(function (z) { return z.name }).join(", ") + ". Ориентир за курс: " + (zs.some(function (z) { return z.from }) ? "от " : "") + R.rub(one * n) + ".</span></div>" + contra + "</div>" +
-      '<button type="button" class="btn btn-gold" id="send">Отправить результат мне</button>' +
-      (b.length ? "" : '<a class="btn btn-line" href="zapis.html">Выбрать день и время</a>') +
+      (b.length || c.length
+        ? '<button type="button" class="btn btn-gold" id="send">Написать мне в Telegram</button>' + (b.length ? "" : '<a class="btn btn-line" data-book>Записаться онлайн</a>')
+        : '<a class="btn btn-gold" data-book>Записаться онлайн</a><button type="button" class="btn btn-line" id="send">Задать вопрос в Telegram</button>') +
       '<button type="button" class="btn btn-soft" id="again">Пройти заново</button>' +
       '<p class="disc">Это ориентир по вашим ответам. Точно скажу, когда посмотрю зону.</p></div>';
     $("again").onclick = again;
+    box.querySelectorAll("a[data-book]").forEach(function (a) { a.href = R.contacts.dikidi; a.target = "_blank"; a.rel = "noopener" });
     $("send").onclick = function () {
       var line = b.length ? "Сейчас есть: " + b.join("; ") + ". Подскажите, когда можно записаться." + (c.length ? " И хочу обсудить: " + c.join("; ") + "." : "")
         : c.length ? "Хочу обсудить до записи: " + c.join("; ") + "."
         : "Противопоказаний по списку не отмечено.";
       R.send("Здравствуйте, Марина! Прошла тест на сайте: " + stage.toLowerCase() + ", " + range + ".\n" +
         "Цвет: " + Q[0].o[ans.color].l.toLowerCase() + "; давность: " + Q[1].o[ans.age].l.toLowerCase() + "; рельеф: " + Q[2].o[ans.relief].l.toLowerCase() + "; ширина: " + Q[3].o[ans.width].l.toLowerCase() + ".\n" +
-        "Зоны: " + zs.map(function (z) { return z.name }).join(", ") + ".\n" + line + "\nХочу на консультацию.", { title: "Результат теста" });
+        "Зоны: " + zs.map(function (z) { return z.name }).join(", ") + ".\n" + line + "\nМой вопрос: ");
     };
     $("prep").hidden = false;
     renderPrep();

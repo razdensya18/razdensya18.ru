@@ -53,6 +53,7 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
 .total .k { font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: #dcb35a }
 .total .sum { font-size: 34px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums }
 .total .sub { font-size: 13px; color: #cdbfa5 }
+.total .btn-line { background: transparent; color: #f3dc9c; border-color: rgba(220,179,90,.65) }
 .note { font-size: 12px; color: var(--muted); text-align: center; margin: 14px 8px 18px }
 </style>
 <script>(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return}}k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js?id=113952603","ym");ym(113952603,"init",{ssr:true,clickmap:true,referrer:document.referrer,url:location.href,accurateTrackBounce:true,trackLinks:true});</script>
@@ -105,7 +106,8 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     <span class="k">Ориентир за курс</span>
     <span class="sum" id="sum">0 ₽</span>
     <span class="sub" id="sub">Выберите хотя бы одну зону</span>
-    <button type="button" class="btn btn-gold" id="go" disabled>Отправить расчёт мне</button>
+    <a class="btn btn-gold" data-book href="https://dikidi.ru/2193435">Записаться онлайн</a>
+    <button type="button" class="btn btn-line" id="go" disabled>Спросить про расчёт в Telegram</button>
   </section>
 
   <p class="note">Цена за одну процедуру на одну зону. Рубец, шов — от 2 000 до 5 000 ₽, точную цену скажу, когда посмотрю.</p>
@@ -193,8 +195,8 @@ h1 { margin: 14px 0 4px; font: 400 34px/1.02 var(--f-display); text-align: cente
     var one = list.reduce(function (s, z) { return s + z.price }, 0);
     var text = "Здравствуйте, Марина! Расчёт с сайта:\n" +
       list.map(function (z) { return "• " + z.name + " — " + R.price(z) }).join("\n") +
-      "\nПроцедур на зону: " + count + "\nОриентир за курс: " + R.rub(one * count) + "\nХочу записаться на консультацию.";
-    R.send(text, { title: "Ваш расчёт" });
+      "\nПроцедур на зону: " + count + "\nОриентир за курс: " + R.rub(one * count) + "\nМой вопрос: ";
+    R.send(text);
   });
   drawFig();
 })();

@@ -60,8 +60,8 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
 <script>
 (function () {
   var R = Razden, feed = document.getElementById("feed"), quick = document.getElementById("quick");
-  var lead = { zones: [], when: "", name: "" }, mode = null;
-  var MENU = ["Сколько стоит?", "Больно ли?", "Сколько процедур?", "Как подготовиться?", "Кому нельзя?", "Записаться"];
+  var lead = { zones: [] }, mode = null;
+  var MENU = ["Сколько стоит?", "Больно ли?", "Сколько процедур?", "Как подготовиться?", "Кому нельзя?", "Записаться", "Написать мне"];
 
   function add(cls, html) { var d = document.createElement("div"); d.className = "msg " + cls; d.innerHTML = html; feed.appendChild(d); feed.scrollTop = feed.scrollHeight; return d }
   function say(html, chips, after) {
@@ -81,14 +81,15 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
     "Сколько процедур?": function () { say("Оптимально 4–8 процедур на одну зону. Перерыв между ними — от 4 до 6 недель: так не теряется накопительный эффект. Свежим растяжкам обычно нужно меньше, старым белым — больше. Точное число скажу на консультации, когда посмотрю растяжки.\n\nПервые дни коже нужен бережный уход — дам памятку. Результат копится от процедуры к процедуре. Полностью стереть растяжку не может ни одна методика, а сделать её заметно менее видимой — можно.", ["Сколько стоит?", "Записаться"]) },
     "Как подготовиться?": function () { say("<b>За день:</b> без скрабов, кислот и спиртовых средств в зоне, без алкоголя.<br><b>В день процедуры:</b> кожа чистая и сухая, без масел, крема, дезодоранта и парфюма. Свободная одежда, кофе лучше не пить.", ["Кому нельзя?", "Записаться"]) },
     "Кому нельзя?": function () { say("Не провожу процедуру при беременности и кормлении грудью. При простуде, герпесе или воспалении в зоне — переносим запись.\n\nЕсть и другие противопоказания, они зависят от здоровья в целом — подробно разбираю их на консультации. Если есть хронические заболевания или сомневаетесь, напишите мне — подскажу, подходит ли вам процедура.", ["Написать мне", "Записаться"]) },
-    "Записаться": function () { mode = "book"; lead.zones = []; say("С удовольствием! Какая зона? Можно несколько, потом «Готово».", zoneChips()) },
-    "Написать мне": function () { R.send("Здравствуйте, Марина! У меня вопрос: ", { title: "Ваш вопрос" }) },
+    // запись — в DIKIDI: там свободные окна и подтверждение
+    "Записаться": function () { say("Записаться можно онлайн: выберите день и время, запись сразу придёт мне.<a class='btn btn-gold act' href='" + R.contacts.dikidi + "' target='_blank' rel='noopener'>Записаться онлайн</a>", ["Как подготовиться?", "Написать мне", "В начало"]) },
+    "Написать мне": function () { R.send("Здравствуйте, Марина! У меня вопрос: ") },
     "В начало": function () { mode = null; say("Что ещё подсказать?") }
   };
   function zoneChips() { return R.zones.map(function (z) { return z.name }).concat(["Готово"]) }
 
   function onChip(text, btn) {
-    if (mode === "calc" || mode === "book") {
+    if (mode === "calc") {
       if (text !== "Готово") {
         var z = R.zones.filter(function (x) { return x.name === text })[0], k = lead.zones.indexOf(z.id);
         if (k > -1) lead.zones.splice(k, 1); else lead.zones.push(z.id);
@@ -97,13 +98,10 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
       if (!lead.zones.length) { R.toast("Отметьте хотя бы одну зону"); return }
       var names = lead.zones.map(function (id) { return R.zone(id).name });
       me(names.join(", "));
-      if (mode === "calc") {
-        var one = lead.zones.reduce(function (s, id) { return s + R.zone(id).price }, 0); mode = null;
-        say("За один визит: <b>" + R.rub(one) + "</b>.\nЗа курс из 4 процедур: <b>" + R.rub(one * 4) + "</b>, из 8: <b>" + R.rub(one * 8) + "</b>.\nТочное число процедур скажу на консультации.", ["Записаться", "В начало"]);
-      } else { mode = "when"; say("Когда вам удобнее?", ["Будни днём", "Будни вечером", "Выходные"]) }
+      var one = lead.zones.reduce(function (s, id) { return s + R.zone(id).price }, 0); mode = null;
+      say("За один визит: <b>" + R.rub(one) + "</b>.\nЗа курс из 4 процедур: <b>" + R.rub(one * 4) + "</b>, из 8: <b>" + R.rub(one * 8) + "</b>.\nТочное число процедур скажу на консультации.", ["Записаться", "В начало"]);
       return;
     }
-    if (mode === "when") { lead.when = text; me(text); mode = "name"; say("Как к вам обращаться? Напишите имя внизу.", []); document.getElementById("inp").focus(); return }
     me(text);
     (A[text] || A["В начало"])();
   }
@@ -113,15 +111,9 @@ body.pv { padding-top: calc(52px + env(safe-area-inset-top, 0px)) }
     e.preventDefault();
     var inp = document.getElementById("inp"), v = inp.value.trim(); if (!v) return;
     inp.value = ""; me(v);
-    if (mode === "name") {
-      lead.name = v; mode = null;
-      var text = "Здравствуйте, Марина! Заявка с сайта.\nИмя: " + lead.name + "\nЗона: " + lead.zones.map(function (id) { return R.zone(id).name }).join(", ") + "\nКогда удобно: " + lead.when.toLowerCase();
-      say("Спасибо, " + R.esc(lead.name) + "! Заявка готова — отправьте её мне, и я подтвержу время.<button type='button' class='btn btn-gold act'>Отправить заявку</button>", ["Как подготовиться?", "В начало"], function (m) { m.querySelector(".act").onclick = function () { R.send(text, { title: "Ваша заявка" }) } });
-      return;
-    }
     var low = v.toLowerCase(), hit = low.match(/цен|стоит|сколько стоит|прайс/) ? "Сколько стоит?" : low.match(/боль/) ? "Больно ли?" : low.match(/сколько|процедур|курс/) ? "Сколько процедур?" : low.match(/подготов/) ? "Как подготовиться?" : low.match(/нельзя|противопок|беремен|корм/) ? "Кому нельзя?" : low.match(/запис/) ? "Записаться" : null;
     if (hit) { A[hit](); return }
-    say("На этот вопрос лучше отвечу лично. Отправьте его мне одной кнопкой.<button type='button' class='btn btn-gold act'>Отправить вопрос</button>", MENU, function (m) { m.querySelector(".act").onclick = function () { R.send("Здравствуйте, Марина! Вопрос с сайта: " + v, { title: "Ваш вопрос" }) } });
+    say("На этот вопрос лучше отвечу лично. Отправьте его мне одной кнопкой.<button type='button' class='btn btn-gold act'>Отправить вопрос</button>", MENU, function (m) { m.querySelector(".act").onclick = function () { R.send("Здравствуйте, Марина! Вопрос с сайта: " + v) } });
   });
 
   say("Здравствуйте! Здесь я собрала ответы на вопросы, которые мне задают чаще всего: цены, процедура, запись.\nВыберите вопрос или напишите свой.");

@@ -7,6 +7,7 @@
     vkChat: "https://vk.me/razdensya18",
     vk: "https://vk.ru/razdensya_18",
     tg: "https://t.me/razdensya18",
+    dikidi: "https://dikidi.ru/2193435",  // онлайн-запись Марины
     ig: "https://instagram.com/razdensya18",
     avito: "https://www.avito.ru/user/f54b6cbb51d9d4f1cca938bcb7401d9d/profile?iid=8391400031#open-reviews-list",
     phone: "",
@@ -144,29 +145,12 @@
     return ok ? Promise.resolve(true) : (api || Promise.resolve(false));
   };
 
-  // Шторка «Сообщение Марине»: Telegram открывается с текстом в ссылке, для ВКонтакте текст копируется и открывается чат
-  R.send = function (text, opts) {
-    opts = opts || {};
-    R.closeSheet();
-    var back = document.createElement("div"); back.className = "sheet-back";
-    back.innerHTML =
-      '<div class="sheet" role="dialog" aria-modal="true" aria-label="Написать мне">' +
-      "<h3>" + R.esc(opts.title || "Написать мне") + "</h3>" +
-      '<p class="hint">В Telegram сообщение откроется уже вписанным. Во ВКонтакте текст скопируется сам — вставьте его в чат.</p>' +
-      '<div class="msg"></div>' +
-      '<a class="btn btn-gold" data-go href="' + R.contacts.tg + "?text=" + encodeURIComponent(text) + '" target="_blank" rel="noopener">' + R.icon("tg") + "Открыть в Telegram</a>" +
-      '<a class="btn btn-line" data-go href="' + R.contacts.vkChat + '" target="_blank" rel="noopener">' + R.icon("vk") + "Скопировать и открыть ВКонтакте</a>" +
-      '<button type="button" class="btn btn-soft" data-copy>' + R.icon("copy") + "Только скопировать</button>" +
-      '<button type="button" class="btn" data-close style="min-height:40px;background:none;color:var(--muted);font-weight:700">Закрыть</button>' +
-      "</div>";
-    back.querySelector(".msg").textContent = text;
-    back.addEventListener("click", function (e) {
-      if (e.target === back || e.target.closest("[data-close]")) { R.closeSheet(); return }
-      if (e.target.closest("[data-go]")) { R.copy(text); R.toast("Текст скопирован. Вставьте его в чат") }
-      if (e.target.closest("[data-copy]")) { R.copy(text).then(function () { R.toast("Текст скопирован") }) }
-    });
-    document.body.appendChild(back);
-    var first = back.querySelector("[data-go]"); if (first) first.focus({ preventScroll: true });
+  // Вопрос Марине: сразу открывает её Telegram с вписанным текстом (текст ещё и копируется — на случай, если Telegram его не подставит)
+  R.send = function (text) {
+    var url = R.contacts.tg + "?text=" + encodeURIComponent(text);
+    R.copy(text);
+    var w = window.open(url, "_blank");
+    if (w) w.opener = null; else location.href = url;
   };
   R.closeSheet = function () { var s = document.querySelector(".sheet-back"); if (s) s.remove() };
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") R.closeSheet() });
@@ -243,6 +227,9 @@
     document.querySelectorAll(".contacts:empty").forEach(function (el) { el.innerHTML = R.contactsHTML() });
     document.querySelectorAll(".signature:empty").forEach(function (el) { el.textContent = "Специалист: " + R.contacts.master + " · " + R.contacts.handle });
     document.querySelectorAll("[data-icon]").forEach(function (el) { if (!el.querySelector("svg")) el.insertAdjacentHTML("afterbegin", R.icon(el.dataset.icon)) });
+    // запись — в DIKIDI, вопросы — Марине в Telegram
+    document.querySelectorAll("a[data-book]").forEach(function (a) { a.href = R.contacts.dikidi; a.target = "_blank"; a.rel = "noopener" });
+    document.addEventListener("click", function (e) { var b = e.target.closest("[data-ask]"); if (b) { e.preventDefault(); R.send(b.dataset.ask) } });
 
     // Полоска на внутренних страницах: назад на главную и чат с Мариной
     if (!document.body.dataset.page) return;
